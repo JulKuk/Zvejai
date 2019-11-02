@@ -11,5 +11,10 @@ namespace GameServer.Models.AbstractFactory
         {
             return new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, };
         }
+
+        public override Entity CreateWeapon()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

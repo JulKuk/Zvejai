@@ -5,11 +5,7 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models.AbstractFactory
 {
-    public abstract class AbstractFactory
+    public class WeaponsFacotry
     {
-        public abstract Entity CreatePlayer();
-
-        public abstract Entity CreateWeapon();
-
     }
 }
