@@ -69,7 +69,7 @@ namespace GameServer.Controllers
             _context.SaveChanges();
 
             //return Ok(); //"created - ok"; 
-            return CreatedAtRoute("GetPlayer", new { id = player.Id }, player);
+            return CreatedAtRoute("GetPlayer", new { id = player.id }, player);
         }
 
 

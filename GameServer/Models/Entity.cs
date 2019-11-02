@@ -9,11 +9,6 @@ namespace GameServer.Models
     {
         public long id { get; set; }
 
-        public Entity(long id)
-        {
-            this.id = id;
-        }
-
         public abstract void SayHello();
     }
 }

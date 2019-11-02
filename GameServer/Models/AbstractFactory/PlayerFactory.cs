@@ -9,7 +9,7 @@ namespace GameServer.Models.AbstractFactory
     {
         public override Entity CreatePlayer()
         {
-            return new Player(1, 100, "Julius");
+            return new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, };
         }
     }
 }
