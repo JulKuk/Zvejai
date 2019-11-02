@@ -7,12 +7,17 @@ namespace GameServer.Models.AbstractFactory
 {
     public class PlayerFactory : AbstractFactory
     {
+        public override Entity CreateObsticale(string Type)
+        {
+            throw new NotImplementedException();
+        }
+
         public override Entity CreatePlayer()
         {
             return new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, };
         }
 
-        public override Entity CreateWeapon()
+        public override Entity CreateWeapon(string GunType)
         {
             throw new NotImplementedException();
         }

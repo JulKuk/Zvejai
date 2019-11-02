@@ -98,14 +98,36 @@ namespace GameClient
         {
             AbstractFactory naujas;
             Console.WriteLine("Web API Client says: \"Hello World!\"");
-            Console.WriteLine("Choose the Factory Builder P(layersFactory), W(eaponsFactory) ");
-            string a = Console.ReadLine();
+            Console.WriteLine("Choose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
+            string a = "";
+            a = Console.ReadLine();
             if (a == "P")
             {
                 naujas = new PlayerFactory();
                 Entity Enmity = naujas.CreatePlayer();
                 Enmity.SayHello();
-                
+            }
+            else if (a == "W")
+            {
+                Console.WriteLine("Choose the WeaponFacotry S(niper), B(azooka), P(istol), A(utomat) or by default Granade C(lose) ");
+                while (!a.Equals("C"))
+                {
+                    a = Console.ReadLine();
+                    naujas = new WeaponsFacotry();
+                    Entity Temp = naujas.CreateWeapon(a);
+                    Temp.SayHello();
+                }
+            }
+            else if (a == "O")
+            {
+                Console.WriteLine("Choose the WeaponFacotry G(reen), R(ed) or by default Blue, C(lose) ");
+                while (!a.Equals("C"))
+                {
+                    a = Console.ReadLine();
+                    naujas = new ObsticaleFacotry();
+                    Entity Temp = naujas.CreateObsticale(a);
+                    Temp.SayHello();
+                }
             }
             Console.ReadKey();
             //RunAsync().GetAwaiter().GetResult();
