@@ -10,12 +10,16 @@ namespace GameServer.Models
         public long PosX { get; set; }
         public long PosY { get; set; }
         public int health_points { get; set; }
+        public Weapon granade { get; set; }
+        public Weapon pistol { get; set; }
 
         public float speed { get; set; }
 
         public Istrategy algorithm;
 
         private List<HealthPointTracker> players = new List<HealthPointTracker>();
+
+       
 
         public void setStrategy(Istrategy algorithm)
         {
@@ -38,6 +42,31 @@ namespace GameServer.Models
             return health_points;
         }
 
+        public Weapon GetGranade()
+        {
+            return granade;
+        }
+
+        public Weapon GetPistol()
+        {
+            return pistol;
+        }
+
+        public void setHealthPoints(int health_points)
+        {
+            this.health_points = health_points;
+        }
+
+        public void setGranade(Weapon granade)
+        {
+            this.granade = granade;
+        }
+
+        public void setPistol(Weapon pistol)
+        {
+            this.pistol = pistol;
+        }
+
         public string GetPlayerName()
         {
             return Name;
@@ -55,5 +84,6 @@ namespace GameServer.Models
                 hpTracker.Update(this, hp);
             }
         }
+        
     }
 }

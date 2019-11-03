@@ -100,13 +100,13 @@ namespace GameClient
         {
             AbstractFactory naujas;
             Console.WriteLine("Web API Client says: \"Hello World!\"");
-            Console.WriteLine("Choose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
+            Console.WriteLine("Choooooose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
             string a = "";
             a = Console.ReadLine();
             if (a == "P")
             {
                 naujas = new PlayerFactory();
-                Player Enmity = naujas.CreatePlayer();
+                Player Enmity = naujas.GetPlayer();
                 Enmity.SayHello();
                 MoveAlgorithm move = new MoveAlgorithm();
                 StopStrategy stop = new StopStrategy();

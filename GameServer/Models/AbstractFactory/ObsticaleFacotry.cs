@@ -30,5 +30,10 @@ namespace GameServer.Models.AbstractFactory
         {
             throw new NotImplementedException();
         }
+
+        public override Player GetPlayer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
