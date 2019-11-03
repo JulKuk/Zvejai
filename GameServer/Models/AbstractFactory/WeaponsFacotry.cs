@@ -7,17 +7,17 @@ namespace GameServer.Models.AbstractFactory
 {
     public class WeaponsFacotry : AbstractFactory
     {
-        public override Entity CreateObsticale(string Type)
+        public override Obsticale CreateObsticale(string Type)
         {
             throw new NotImplementedException();
         }
 
-        public override Entity CreatePlayer()
+        public override Player CreatePlayer()
         {
             throw new NotImplementedException();
         }
 
-        public override Entity CreateWeapon(String GunType)
+        public override Weapon CreateWeapon(String GunType)
         {
             if(GunType.Equals("S"))
             {

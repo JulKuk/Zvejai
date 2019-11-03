@@ -7,11 +7,11 @@ namespace GameServer.Models.AbstractFactory
 {
     public abstract class AbstractFactory
     {
-        public abstract Entity CreatePlayer();
+        public abstract Player CreatePlayer();
 
-        public abstract Entity CreateWeapon(String GunType);
+        public abstract Weapon CreateWeapon(String GunType);
 
-        public abstract Entity CreateObsticale(String Type);
+        public abstract Obsticale CreateObsticale(String Type);
 
     }
 }

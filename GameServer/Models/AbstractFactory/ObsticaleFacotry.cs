@@ -7,7 +7,7 @@ namespace GameServer.Models.AbstractFactory
 {
     public class ObsticaleFacotry : AbstractFactory
     {
-        public override Entity CreateObsticale(string Type)
+        public override Obsticale CreateObsticale(string Type)
         {
             if(Type.Equals("R"))
             {
@@ -21,12 +21,12 @@ namespace GameServer.Models.AbstractFactory
             return new Obsticale { Type = "Blue", Health_points = 75 };
         }
 
-        public override Entity CreatePlayer()
+        public override Player CreatePlayer()
         {
             throw new NotImplementedException();
         }
 
-        public override Entity CreateWeapon(string GunType)
+        public override Weapon CreateWeapon(string GunType)
         {
             throw new NotImplementedException();
         }

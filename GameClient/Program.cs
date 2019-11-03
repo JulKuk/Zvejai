@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using GameServer.Models;
 using GameServer.Models.AbstractFactory;
+using GameServer.Models.Strategy;
 
 namespace GameClient
 {
@@ -104,8 +105,17 @@ namespace GameClient
             if (a == "P")
             {
                 naujas = new PlayerFactory();
-                Entity Enmity = naujas.CreatePlayer();
+                Player Enmity = naujas.CreatePlayer();
                 Enmity.SayHello();
+                MoveAlgorithm move = new MoveAlgorithm();
+                StopStrategy stop = new StopStrategy();
+                Enmity.setStrategy(move);
+                Enmity.Move();
+                Console.WriteLine("My strategy is set to move. My Speed is " + Enmity.speed);
+                Enmity.setStrategy(stop);
+                Enmity.Move();
+                Console.WriteLine("My strategy is set to Stop. My Speed is " + Enmity.speed);
+
             }
             else if (a == "W")
             {

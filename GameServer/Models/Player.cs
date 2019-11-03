@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameServer.Models.Strategy;
+using System;
 namespace GameServer.Models
 {
     public class Player :Entity
@@ -7,6 +8,20 @@ namespace GameServer.Models
         public long PosX { get; set; }
         public long PosY { get; set; }
         public int health_points { get; set; }
+
+        public float speed { get; set; }
+
+        public Istrategy algorithm;
+
+        public void setStrategy(Istrategy algorithm)
+        {
+            this.algorithm = algorithm;
+        }
+
+        public void Move()
+        {
+            algorithm.Move(this);
+        }
 
         public override void SayHello()
         {
