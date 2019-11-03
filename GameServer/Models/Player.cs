@@ -10,8 +10,8 @@ namespace GameServer.Models
         public long PosX { get; set; }
         public long PosY { get; set; }
         public int health_points { get; set; }
-        public Weapon granade { get; set; }
-        public Weapon pistol { get; set; }
+
+        private List<Weapon> playerGuns = new List<Weapon>();
 
         public float speed { get; set; }
 
@@ -28,48 +28,13 @@ namespace GameServer.Models
 
         public void Move()
         {
-            algorithm.Move(this);
+            algorithm.action(this);
         }
 
         public override void SayHello()
         {
             Console.WriteLine("Hi Im a player and my name is " + Name + " and I have " + health_points + " HP");
             Console.WriteLine("My coordinates are X" + PosX + " Y: " + PosY);
-        }
-
-        public int GetHealthPoint()
-        {
-            return health_points;
-        }
-
-        public Weapon GetGranade()
-        {
-            return granade;
-        }
-
-        public Weapon GetPistol()
-        {
-            return pistol;
-        }
-
-        public void setHealthPoints(int health_points)
-        {
-            this.health_points = health_points;
-        }
-
-        public void setGranade(Weapon granade)
-        {
-            this.granade = granade;
-        }
-
-        public void setPistol(Weapon pistol)
-        {
-            this.pistol = pistol;
-        }
-
-        public string GetPlayerName()
-        {
-            return Name;
         }
 
         public void UpdateHealth(int hp)
@@ -83,6 +48,16 @@ namespace GameServer.Models
             {
                 hpTracker.Update(this, hp);
             }
+        }
+
+        public void addGuns(Weapon weapon)
+        {
+            playerGuns.Add(weapon);
+        }
+
+        public List<Weapon> getPlayerGuns()
+        {
+            return playerGuns;
         }
         
     }

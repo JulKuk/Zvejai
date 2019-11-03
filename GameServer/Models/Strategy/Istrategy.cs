@@ -7,7 +7,7 @@ namespace GameServer.Models.Strategy
 {
     public interface Istrategy
     {
-        void Move(Player entity);
+        void action(Player entity);
 
     }
 }

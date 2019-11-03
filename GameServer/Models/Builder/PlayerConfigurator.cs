@@ -17,7 +17,7 @@ namespace GameServer.Models.Builder
 
         public PlayerConfigurator AddHealthPoints()
         {
-            this.player.setHealthPoints(200);
+            this.player.health_points = 200;
             return this;
         }
 
@@ -27,7 +27,7 @@ namespace GameServer.Models.Builder
             naujas = new WeaponsFacotry();
             Weapon Temp = naujas.CreateWeapon("");
 
-            this.player.setGranade(Temp);
+            this.player.addGuns(Temp);
             return this;
         }
 
@@ -37,13 +37,13 @@ namespace GameServer.Models.Builder
             naujas = new WeaponsFacotry();
             Weapon Temp = naujas.CreateWeapon("P");
 
-            this.player.setPistol(Temp);
+            this.player.addGuns(Temp);
             return this;
         }
 
         public Player build()
         {
-            Console.WriteLine("Created player: " + player.GetHealthPoint() + " pistolestas " + player.GetPistol().damage);
+            Console.WriteLine("Created player: " + player.health_points + " pistolestas " + player.getPlayerGuns()[1].damage);
             return player;
         }
     }
