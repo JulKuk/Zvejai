@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
+using GameServer.Models.Observer;
 
 namespace GameClient
 {
@@ -139,6 +140,26 @@ namespace GameClient
                     Temp.SayHello();
                 }
             }
+
+            Console.WriteLine("--------OBSERVER------------");
+
+            Observer observer = new Observer();
+
+            Player playerObserver = new Player()
+            {
+                Name = "a",
+                health_points = 10,
+                PosX = 1,
+                PosY = 1
+            };
+            Console.WriteLine("player health before changing");
+            Console.WriteLine(playerObserver.health_points);
+
+            int hp = 1;
+            observer.Update(playerObserver, hp);
+            Console.WriteLine("player health after observer change");
+            Console.WriteLine(playerObserver.health_points);
+
             Console.ReadKey();
             //RunAsync().GetAwaiter().GetResult();
         }
