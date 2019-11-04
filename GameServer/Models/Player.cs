@@ -18,7 +18,6 @@ namespace GameServer.Models
         public Istrategy algorithm;
 
         private List<HealthPointTracker> players = new List<HealthPointTracker>();
-
        
 
         public void setStrategy(Istrategy algorithm)

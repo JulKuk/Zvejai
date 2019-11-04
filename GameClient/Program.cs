@@ -9,6 +9,7 @@ using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
 using GameServer.Models.Observer;
+using GameServer.Models.Decorator;
 
 namespace GameClient
 {
@@ -18,6 +19,9 @@ namespace GameClient
         static HttpClient client = new HttpClient();
         static string requestUri = "api/player/";
         static string mediaType = "application/json";
+
+        private static Player player;
+        private static Ginklas ginklas;
 
         //static void ShowProduct(Player player)
         //{
@@ -100,7 +104,7 @@ namespace GameClient
         {
             AbstractFactory naujas;
             Console.WriteLine("Web API Client says: \"Hello World!\"");
-            Console.WriteLine("Choooooose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
+            Console.WriteLine("Choose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
             string a = "";
             a = Console.ReadLine();
             if (a == "P")
@@ -131,7 +135,7 @@ namespace GameClient
             }
             else if (a == "O")
             {
-                Console.WriteLine("Choose the WeaponFacotry G(reen), R(ed) or by default Blue, C(lose) ");
+                Console.WriteLine("Choose the WeaponFactory G(reen), R(ed) or by default Blue, C(lose) ");
                 while (!a.Equals("C"))
                 {
                     a = Console.ReadLine();
@@ -147,7 +151,7 @@ namespace GameClient
 
             Player playerObserver = new Player()
             {
-                Name = "a",
+                Name = "Zaidejas1",
                 health_points = 10,
                 PosX = 1,
                 PosY = 1
@@ -160,8 +164,21 @@ namespace GameClient
             Console.WriteLine("player health after observer change");
             Console.WriteLine(playerObserver.health_points);
 
-            Console.ReadKey();
+            
             //RunAsync().GetAwaiter().GetResult();
+
+            Console.WriteLine("--------DECORATOR------------");
+            Gameboard board = new Gameboard();
+
+            Ginklas ginklas = new Pistoletas(playerObserver);
+            board.setGinklai(ginklas);
+            Console.WriteLine(board.showAllGinklai());
+
+            ginklas = new Snaiperis(playerObserver);
+            board.setGinklai(ginklas);
+            Console.WriteLine(board.showAllGinklai());
+
+            Console.ReadKey();
         }
 
         //static async Task RunAsync()
