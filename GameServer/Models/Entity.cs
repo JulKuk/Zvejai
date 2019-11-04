@@ -10,5 +10,7 @@ namespace GameServer.Models
         public long id { get; set; }
 
         public abstract void SayHello();
+
+       // public abstract Object Clone();
     }
 }
