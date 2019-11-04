@@ -40,14 +40,20 @@ namespace GameServer.Models
         public void UpdateHealth(int hp)
         {
             health_points += hp;
+            Update();
         }
 
-        public void Notify(int hp)
+        //public void Notify(int hp)
+        //{
+        //    foreach (HealthPointTracker hpTracker in players)
+        //    {
+        //        hpTracker.Update(this, hp);
+        //    }
+        //}
+
+        public override void Update()
         {
-            foreach (HealthPointTracker hpTracker in players)
-            {
-                hpTracker.Update(this, hp);
-            }
+            Console.WriteLine(this.Name + " health is: " + this.health_points);
         }
 
         public void addGuns(Weapon weapon)

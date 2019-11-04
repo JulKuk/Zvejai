@@ -143,22 +143,49 @@ namespace GameClient
 
             Console.WriteLine("--------OBSERVER------------");
 
-            Observer observer = new Observer();
+            AbstractFactory obsTemp = new PlayerFactory();
+            Player temp1 = obsTemp.GetPlayer();
+            AbstractFactory obsTemp1 = new PlayerFactory();
+            Player temp2 = obsTemp1.GetPlayer();
 
-            Player playerObserver = new Player()
+            Player t1 = new Player
             {
-                Name = "a",
+                Name = "Pone",
                 health_points = 10,
                 PosX = 1,
-                PosY = 1
+                PosY = 1,
+                speed = 10,
+                id = 1000
             };
-            Console.WriteLine("player health before changing");
-            Console.WriteLine(playerObserver.health_points);
 
-            int hp = 1;
-            observer.Update(playerObserver, hp);
-            Console.WriteLine("player health after observer change");
-            Console.WriteLine(playerObserver.health_points);
+            Player t2 = new Player
+            {
+                Name = "Ptwo",
+                health_points = 10,
+                PosX = 2,
+                PosY = 2,
+                speed = 10,
+                id = 1001
+            };
+
+            //ConcreteHealthPoints observer = new ConcreteHealthPoints();
+
+            CHP observer = new CHP();
+
+            observer.Attach(t1);
+            observer.Attach(t2);
+
+            observer.CheckHealth = t1;
+            observer.CheckHealth = t2;
+
+            //t1.UpdateHealth(1);
+            //observer.HealthPoints = 11;
+            t1.UpdateHealth(1);
+            observer.CheckHealth = t1;
+
+            t1.UpdateHealth(-1);
+            observer.CheckHealth = t1;
+
 
             Console.ReadKey();
             //RunAsync().GetAwaiter().GetResult();
