@@ -30,5 +30,10 @@ namespace GameServer.Models.AbstractFactory
             return player.startPlayer().AddGranade().AddHealthPoints().AddPistol().build();
             //return new Player();
         }
+
+        public override Obsticale Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

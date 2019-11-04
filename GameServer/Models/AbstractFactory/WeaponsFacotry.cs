@@ -44,5 +44,10 @@ namespace GameServer.Models.AbstractFactory
         {
             throw new NotImplementedException();
         }
+
+        public override Obsticale Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,7 +9,6 @@ using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
 using GameServer.Models.Observer;
-using GameServer.Models.Decorator;
 
 namespace GameClient
 {
@@ -19,9 +18,6 @@ namespace GameClient
         static HttpClient client = new HttpClient();
         static string requestUri = "api/player/";
         static string mediaType = "application/json";
-
-        private static Player player;
-        private static Ginklas ginklas;
 
         //static void ShowProduct(Player player)
         //{
@@ -104,7 +100,7 @@ namespace GameClient
         {
             AbstractFactory naujas;
             Console.WriteLine("Web API Client says: \"Hello World!\"");
-            Console.WriteLine("Choose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
+            Console.WriteLine("Choooooose the Factory Builder P(layersFactory), W(eaponsFactory), O(bsticalesFactory) ");
             string a = "";
             a = Console.ReadLine();
             if (a == "P")
@@ -135,7 +131,7 @@ namespace GameClient
             }
             else if (a == "O")
             {
-                Console.WriteLine("Choose the WeaponFactory G(reen), R(ed) or by default Blue, C(lose) ");
+                Console.WriteLine("Choose the WeaponFacotry G(reen), R(ed) or by default Blue, C(lose) ");
                 while (!a.Equals("C"))
                 {
                     a = Console.ReadLine();
@@ -147,38 +143,52 @@ namespace GameClient
 
             Console.WriteLine("--------OBSERVER------------");
 
-            Observer observer = new Observer();
+            AbstractFactory obsTemp = new PlayerFactory();
+            Player temp1 = obsTemp.GetPlayer();
+            AbstractFactory obsTemp1 = new PlayerFactory();
+            Player temp2 = obsTemp1.GetPlayer();
 
-            Player playerObserver = new Player()
+            Player t1 = new Player
             {
-                Name = "Zaidejas1",
+                Name = "Pone",
                 health_points = 10,
                 PosX = 1,
-                PosY = 1
+                PosY = 1,
+                speed = 10,
+                id = 1000
             };
-            Console.WriteLine("player health before changing");
-            Console.WriteLine(playerObserver.health_points);
 
-            int hp = 1;
-            observer.Update(playerObserver, hp);
-            Console.WriteLine("player health after observer change");
-            Console.WriteLine(playerObserver.health_points);
+            Player t2 = new Player
+            {
+                Name = "Ptwo",
+                health_points = 10,
+                PosX = 2,
+                PosY = 2,
+                speed = 10,
+                id = 1001
+            };
 
-            
-            //RunAsync().GetAwaiter().GetResult();
+            //ConcreteHealthPoints observer = new ConcreteHealthPoints();
 
-            Console.WriteLine("--------DECORATOR------------");
-            Gameboard board = new Gameboard();
+            CHP observer = new CHP();
 
-            Ginklas ginklas = new Pistoletas(playerObserver);
-            board.setGinklai(ginklas);
-            Console.WriteLine(board.showAllGinklai());
+            observer.Attach(t1);
+            observer.Attach(t2);
 
-            ginklas = new Snaiperis(playerObserver);
-            board.setGinklai(ginklas);
-            Console.WriteLine(board.showAllGinklai());
+            observer.CheckHealth = t1;
+            observer.CheckHealth = t2;
+
+            //t1.UpdateHealth(1);
+            //observer.HealthPoints = 11;
+            t1.UpdateHealth(1);
+            observer.CheckHealth = t1;
+
+            t1.UpdateHealth(-1);
+            observer.CheckHealth = t1;
+
 
             Console.ReadKey();
+            //RunAsync().GetAwaiter().GetResult();
         }
 
         //static async Task RunAsync()
