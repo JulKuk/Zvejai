@@ -9,6 +9,7 @@ using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
 using GameServer.Models.Observer;
+using GameServer.Models.Decorator;
 
 namespace GameClient
 {
@@ -186,6 +187,16 @@ namespace GameClient
             t1.UpdateHealth(-1);
             observer.CheckHealth = t1;
 
+            Console.WriteLine("--------Decorator------------");
+            Gameboard board = new Gameboard();
+
+            Ginklas ginklas = new Pistoletas(t1);
+            board.setGinklai(ginklas);
+            Console.WriteLine(board.showAllGinklai());
+
+            ginklas = new Snaiperis(t1);
+            board.setGinklai(ginklas);
+            Console.WriteLine(board.showAllGinklai());
 
             Console.ReadKey();
             //RunAsync().GetAwaiter().GetResult();
