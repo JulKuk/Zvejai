@@ -8,12 +8,12 @@ namespace GameServer.Models.Observer
     public class CHP : HealthPoints
     {
         private List<Player> players;
-        private List<Tuple<long, int>> Health;
+        private List<HealthPoints> health;
 
         public CHP()
         {
             players = new List<Player>();
-            Health = new List<Tuple<long, int>>();
+            health = new List<HealthPoints>();
         }
 
         public Player CheckHealth
@@ -34,26 +34,27 @@ namespace GameServer.Models.Observer
                 if (!hasElement)
                 {
                     players.Add(value);
-                    Health.Add(Tuple.Create(value.id, value.health_points));
+                    health.Add(new HealthPoints(value.health_points, value.id));
                 }
                 
                 foreach (Player p in players)
                 {
                     if (p.id == value.id)
                     {
-                        int hp = 0;
-                        foreach (Tuple<long, int> tuple in Health)
+                        //int hp = 0;
+                        foreach (HealthPoints item in health)
                         {
-                            if (tuple.Item1 == value.id)
+                            if (item.GetID() == value.id)
                             {
-                                hp = tuple.Item2;
+                                if (item.GetHP() != value.health_points)
+                                {
+                                    item.SetHP(value.health_points);
+                                    p.health_points = value.health_points;
+                                    Notify();
+                                }
                             }
                         }
-                        if (hp != value.health_points)
-                        {
-                            p.health_points = value.health_points;
-                            Notify();
-                        }
+                        
                     }
                 }
             }

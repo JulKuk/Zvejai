@@ -183,6 +183,9 @@ namespace GameClient
             t1.UpdateHealth(1);
             observer.CheckHealth = t1;
 
+            t1.UpdateHealth(-1);
+            observer.CheckHealth = t1;
+
 
             Console.ReadKey();
             //RunAsync().GetAwaiter().GetResult();
