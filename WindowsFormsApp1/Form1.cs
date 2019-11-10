@@ -25,5 +25,18 @@ namespace WindowsFormsApp1
         {
 
         }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+           
+        }
+        private void PictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics canvas = e.Graphics;
+
+            canvas.FillRectangle(Brushes.Green, 10, 10, 100, 100);
+            canvas.FillRectangle(Brushes.Orange, 5, 5, 20, 20);
+        }
+
     }
 }
