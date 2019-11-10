@@ -11,14 +11,14 @@ namespace GameServer.Models.AbstractFactory
         {
             if(Type.Equals("R"))
             {
-                return new Obsticale { Type = "Red", Health_points = 50 };
+                return new Obsticale { Type = "Red", Health_points = 20 };
             }
             if (Type.Equals("G"))
             {
-                return new Obsticale { Type = "Green", Health_points = 10 };
+                return new Obsticale { Type = "Green", Health_points = 30 };
             }
 
-            return new Obsticale { Type = "Blue", Health_points = 75 };
+            return new Obsticale { Type = "Blue", Health_points = 50 };
         }
 
         public override Player CreatePlayer()
@@ -29,6 +29,18 @@ namespace GameServer.Models.AbstractFactory
         public override Weapon CreateWeapon(string GunType)
         {
             throw new NotImplementedException();
+        }
+
+        public override Player GetPlayer()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Obsticale Clone()
+        {
+           // Obsticale naujas = this.MemberwiseClone() as Obsticale;
+
+            return this.MemberwiseClone() as Obsticale;
         }
     }
 }

@@ -13,5 +13,8 @@ namespace GameServer.Models.AbstractFactory
 
         public abstract Obsticale CreateObsticale(String Type);
 
+        public abstract Player GetPlayer();
+
+        public abstract Obsticale Clone();
     }
 }

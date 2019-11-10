@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
+using GameServer.Models.Observer;
+using GameServer.Models.Decorator;
 
 namespace GameClient
 {
@@ -15,5 +17,5 @@ namespace GameClient
     class Program
     {
 
-    }
+        //}    }
 }

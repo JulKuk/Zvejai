@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameServer.Models.Strategy
+namespace GameServer.Models.Observer
 {
-    public interface Istrategy
+    public class ConcreteObserver
     {
-        void action(Player entity);
-
     }
 }

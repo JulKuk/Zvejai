@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameServer.Models.Builder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,16 @@ namespace GameServer.Models.AbstractFactory
             }
 
             return new Granade { ammo = 1, name = "small", damage = 10, cost = 0 };
+        }
+
+        public override Player GetPlayer()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Obsticale Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }

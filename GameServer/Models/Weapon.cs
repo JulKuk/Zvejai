@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameServer.Models.Decorator;
 
 namespace GameServer.Models
 {

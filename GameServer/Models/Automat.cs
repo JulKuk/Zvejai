@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameServer.Models
+namespace GameServer.Models.Builder
 {
     public class Automat : Weapon
     {
