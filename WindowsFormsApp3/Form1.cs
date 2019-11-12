@@ -27,7 +27,8 @@ namespace WindowsFormsApp1
         private Direction _playerDirection;
         private Player P1;
         private bool createPlayer = false;
-        
+        private bool createdPlayer = false;
+
 
         public Form1()
         {
@@ -106,9 +107,9 @@ namespace WindowsFormsApp1
                     createPlayer = true;
                     textBox1.AppendText("Creating player:" + Environment.NewLine);
                     break;
-                //default:
-                //    _playerDirection = Direction.Stop;
-                //    break;
+                    //default:
+                    //    _playerDirection = Direction.Stop;
+                    //    break;
             }
         }
 
@@ -118,43 +119,6 @@ namespace WindowsFormsApp1
             textBox1.AppendText("Player stopped." + Environment.NewLine);
             _playerDirection = Direction.Stop;
         }
-
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            //pagal nustatymus padaryti zaidimo lauka
-            if (P1.PosX >= 5 && P1.PosX <= 305 && P1.PosY >= 5 && P1.PosY <= 305)
-            {
-                switch (_playerDirection)
-                {
-                    case Direction.Right:
-                        P1.PosX += (P1.PosX != 305 ? 5 : 0);
-                        //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
-                        break;
-                    case Direction.Left:
-                        P1.PosX -= (P1.PosX != 5 ? 5 : 0);
-                        //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
-                        break;
-                    case Direction.Up:
-                        P1.PosY -= (P1.PosY != 5 ? 5 : 0);
-                        //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
-                        break;
-                    case Direction.Down:
-                        P1.PosY += (P1.PosY != 305 ? 5 : 0);
-                        //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
-                        break;
-                    case Direction.Stop:
-                        P1.PosX += 0;
-                        P1.PosY += 0;
-                        //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
-                        break;
-                }
-            }
-
-            Invalidate();
-        }
-
-        //note that paisyti reikia ant formos, o ne i picture
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             //pagal nustatymus zaidimo laukas
@@ -162,13 +126,57 @@ namespace WindowsFormsApp1
             e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
 
             //zaidejo objektas
-            if(createPlayer)
+            if (createPlayer)
             {
-                P1 = new PlayerFactory().CreatePlayer();
+                P1 = new PlayerFactory().GetPlayer();
                 P1.PosY = 10;
                 P1.PosX = 10;
                 e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
+                createdPlayer = true;
+                createPlayer = false;
             }
+            if (createdPlayer)
+                e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (createdPlayer)
+            {
+                //pagal nustatymus padaryti zaidimo lauka
+                if (P1.PosX >= 5 && P1.PosX <= 305 && P1.PosY >= 5 && P1.PosY <= 305)
+                {
+                    switch (_playerDirection)
+                    {
+                        case Direction.Right:
+                            P1.PosX += (P1.PosX != 305 ? 5 : 0);
+                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            break;
+                        case Direction.Left:
+                            P1.PosX -= (P1.PosX != 5 ? 5 : 0);
+                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            break;
+                        case Direction.Up:
+                            P1.PosY -= (P1.PosY != 5 ? 5 : 0);
+                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            break;
+                        case Direction.Down:
+                            P1.PosY += (P1.PosY != 305 ? 5 : 0);
+                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            break;
+                        case Direction.Stop:
+                            P1.PosX += 0;
+                            P1.PosY += 0;
+                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            break;
+                    }
+                }
+
+            }
+            Invalidate();
+        }
+
+        //note that paisyti reikia ant formos, o ne i picture
+       
     }
 }
