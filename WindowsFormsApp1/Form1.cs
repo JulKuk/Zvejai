@@ -24,9 +24,9 @@ namespace WindowsFormsApp1
             Left, Right, Up, Down, Stop
         }
 
-        private int _x; //situos reikia is playerio paimt
-        private int _y; //situos reikia is playerio paimt
         private Direction _playerDirection;
+        private Player P1;
+        private bool createPlayer = false;
         
 
         public Form1()
@@ -39,8 +39,6 @@ namespace WindowsFormsApp1
             InitializeComponent();
 
             //nustatyti kiekvieno zaidejo pozicija atskiruose kampuose kai iseis su zaideju kazka padaryt
-            _x = 50;
-            _y = 50;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -75,7 +73,7 @@ namespace WindowsFormsApp1
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            //kol kas neveikia kai keli mygtukai vienu metu spaudziami
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -104,6 +102,10 @@ namespace WindowsFormsApp1
                 case Keys.Space:
                     textBox1.AppendText("Player shot." + Environment.NewLine);
                     break;
+                case Keys.C:
+                    createPlayer = true;
+                    textBox1.AppendText("Creating player:" + Environment.NewLine);
+                    break;
                 //default:
                 //    _playerDirection = Direction.Stop;
                 //    break;
@@ -121,29 +123,29 @@ namespace WindowsFormsApp1
         private void timer1_Tick(object sender, EventArgs e)
         {
             //pagal nustatymus padaryti zaidimo lauka
-            if (_x >= 5 && _x <= 305 && _y >= 5 && _y <= 305)
+            if (P1.PosX >= 5 && P1.PosX <= 305 && P1.PosY >= 5 && P1.PosY <= 305)
             {
                 switch (_playerDirection)
                 {
                     case Direction.Right:
-                        _x += (_x != 305 ? 5 : 0);
+                        P1.PosX += (P1.PosX != 305 ? 5 : 0);
                         //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
                         break;
                     case Direction.Left:
-                        _x -= (_x != 5 ? 5 : 0);
+                        P1.PosX -= (P1.PosX != 5 ? 5 : 0);
                         //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
                         break;
                     case Direction.Up:
-                        _y -= (_y != 5 ? 5 : 0);
+                        P1.PosY -= (P1.PosY != 5 ? 5 : 0);
                         //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
                         break;
                     case Direction.Down:
-                        _y += (_y != 305 ? 5 : 0);
+                        P1.PosY += (P1.PosY != 305 ? 5 : 0);
                         //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
                         break;
                     case Direction.Stop:
-                        _x += 0;
-                        _y += 0;
+                        P1.PosX += 0;
+                        P1.PosY += 0;
                         //textBox1.AppendText("x: " + _x + " y: " + _y + " " + Environment.NewLine);
                         break;
                 }
@@ -160,7 +162,13 @@ namespace WindowsFormsApp1
             e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
 
             //zaidejo objektas
-            e.Graphics.FillRectangle(Brushes.Orange, _x, _y, 20, 20);
+            if(createPlayer)
+            {
+                P1 = new PlayerFactory().CreatePlayer();
+                P1.PosY = 10;
+                P1.PosX = 10;
+                e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
+            }
         }
     }
 }
