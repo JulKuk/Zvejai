@@ -11,6 +11,9 @@ using System.Windows.Forms;
 using GameServer.Models;
 using GameServer.Models.AbstractFactory;
 using GameServer.Models.Strategy;
+using GameServer.Models.Builder;
+using GameServer.Models.Observer;
+using GameServer.Models.Decorator;
 
 namespace WindowsFormsApp1
 {
@@ -28,7 +31,7 @@ namespace WindowsFormsApp1
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
         {
-           
+
         }
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
@@ -38,5 +41,21 @@ namespace WindowsFormsApp1
             canvas.FillRectangle(Brushes.Orange, 5, 5, 20, 20);
         }
 
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.K)
+            {
+                textBox1.AppendText("labas");
+                PlayerFactory player = new PlayerFactory();
+                Player naujas = player.GetPlayer();
+                string bel = naujas.Name;
+                textBox1.AppendText(bel);
+            }
+        }
     }
 }
