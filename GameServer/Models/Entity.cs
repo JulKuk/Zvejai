@@ -10,7 +10,7 @@ namespace GameServer.Models
     {
         public long id { get; set; }
 
-        public abstract void SayHello();
+        public abstract string SayHello();
 
         public virtual void Update()
         {

@@ -131,6 +131,7 @@ namespace WindowsFormsApp1
                 P1 = new PlayerFactory().GetPlayer();
                 P1.PosY = 10;
                 P1.PosX = 10;
+                textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
                 e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
                 createdPlayer = true;
                 createPlayer = false;
@@ -150,24 +151,24 @@ namespace WindowsFormsApp1
                     {
                         case Direction.Right:
                             P1.PosX += (P1.PosX != 305 ? 5 : 0);
-                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
                             break;
                         case Direction.Left:
                             P1.PosX -= (P1.PosX != 5 ? 5 : 0);
-                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
                             break;
                         case Direction.Up:
                             P1.PosY -= (P1.PosY != 5 ? 5 : 0);
-                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
                             break;
                         case Direction.Down:
                             P1.PosY += (P1.PosY != 305 ? 5 : 0);
-                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
                             break;
                         case Direction.Stop:
                             P1.PosX += 0;
                             P1.PosY += 0;
-                            textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
                             break;
                     }
                 }

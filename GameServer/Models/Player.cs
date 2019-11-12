@@ -13,6 +13,8 @@ namespace GameServer.Models
 
         private List<Weapon> playerGuns = new List<Weapon>();
 
+        public Weapon defaultGun { get; set; }
+
         public float speed { get; set; }
 
         public Istrategy algorithm;
@@ -30,10 +32,9 @@ namespace GameServer.Models
             algorithm.action(this);
         }
 
-        public override void SayHello()
+        public override string SayHello()
         {
-            Console.WriteLine("Hi Im a player and my name is " + Name + " and I have " + health_points + " HP");
-            Console.WriteLine("My coordinates are X" + PosX + " Y: " + PosY);
+            return this.Name;
         }
 
         public void UpdateHealth(int hp)
@@ -58,6 +59,7 @@ namespace GameServer.Models
         public void addGuns(Weapon weapon)
         {
             playerGuns.Add(weapon);
+            defaultGun = weapon;
         }
 
         public List<Weapon> getPlayerGuns()

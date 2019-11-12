@@ -8,9 +8,9 @@ namespace GameServer.Models
     public class Pistol : Weapon
     {
         public string name { get; set; }
-        public override void SayHello()
+        public override string SayHello()
         {
-            Console.WriteLine("Im Pistol My name is " + name + " my Cost : " + cost + " $ My damage is " + damage + " and I have " + ammo + " ammo.");
+            return name;
         }
     }
 }

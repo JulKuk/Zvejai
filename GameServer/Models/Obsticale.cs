@@ -25,9 +25,9 @@ namespace GameServer.Models
             // throw new NotImplementedException();
         }
 
-        public override void SayHello()
+        public override string SayHello()
         {
-            Console.WriteLine("Im Obsticale : " + Type + "My HP: " + Health_points);
+            return Type;
         }
 
         //public override Obsticale Clone()

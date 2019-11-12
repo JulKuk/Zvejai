@@ -13,9 +13,9 @@ namespace GameServer.Models
         public int damage { get; set; }
         public int ammo { get; set; }
 
-        public override void SayHello()
+        public override string SayHello()
         {
-            Console.WriteLine("Im Weapon Entity");
+           return "Im Weapon Entity";
         }
     }
 }
