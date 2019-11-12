@@ -43,19 +43,37 @@ namespace WindowsFormsApp1
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            
+        }
 
+        private async void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
         }
 
         private async void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.K)
+            switch (e.KeyCode)
             {
-                textBox1.AppendText("labas");
-                PlayerFactory player = new PlayerFactory();
-                Player naujas = player.GetPlayer();
-                string bel = naujas.Name;
-                textBox1.AppendText(bel);
+                case Keys.W:
+                    textBox1.AppendText("Player moved up." + Environment.NewLine);
+                    break;
+                case Keys.S:
+                    textBox1.AppendText("Player moved down." + Environment.NewLine);
+                    break;
+                case Keys.A:
+                    textBox1.AppendText("Player moved left." + Environment.NewLine);
+                    break;
+                case Keys.D:
+                    textBox1.AppendText("Player moved right." + Environment.NewLine);
+                    break;
+                case Keys.Space:
+                    textBox1.AppendText("Player shot." + Environment.NewLine);
+                    break;
             }
+        }
+
+        private async void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
         }
     }
 }
