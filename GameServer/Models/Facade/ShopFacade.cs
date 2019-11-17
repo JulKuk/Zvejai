@@ -11,13 +11,17 @@ namespace GameServer.Models.Facade
 
         ShopManager shopManager = new ShopManager();
 
-        Item pistol = new Item("Pistoletas", 20);
-        Item automat = new Item("Automatas", 100);
+        Item bazuka = new Item("Bazuka", new Bazooka());
+        Item automat = new Item("Automatas", new Automat());
+        Item pistol = new Item("Pistoletas", new Pistol());
+        Item sniper = new Item("Sniperis", new Sniper());
 
         public void Open(Player p)
         {
-            shopManager.shopInventory.AddItem(pistol);
+            shopManager.shopInventory.AddItem(bazuka);
             shopManager.shopInventory.AddItem(automat);
+            shopManager.shopInventory.AddItem(pistol);
+            shopManager.shopInventory.AddItem(sniper);
             shopManager.setPlayerGold(p);
 
             //bool canSellPistol = shopManager.CanBuyItem(p, pistol);
@@ -81,7 +85,7 @@ namespace GameServer.Models.Facade
 
         public bool PlayerHasEnoughMoney(Item item)
         {
-            if (playerGold >= item.value)
+            if (playerGold >= item.weapon.cost)
             {
                 return true;
             }
@@ -89,15 +93,17 @@ namespace GameServer.Models.Facade
         }
     }
 
-    public class Item
+    public class Item : Weapon
     {
         public string name;
-        public int value;
+        public Weapon weapon;
 
-        public Item(string name, int value)
+        Weapon b = new Bazooka();
+
+        public Item(string name, Weapon weapon)
         {
             this.name = name;
-            this.value = value;
+            this.weapon = weapon;
         }
     }
 }
