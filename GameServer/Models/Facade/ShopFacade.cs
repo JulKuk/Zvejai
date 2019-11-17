@@ -14,7 +14,7 @@ namespace GameServer.Models.Facade
         Item pistol = new Item("Pistoletas", 20);
         Item automat = new Item("Automatas", 100);
 
-        void Open(Player p)
+        public void Open(Player p)
         {
             shopManager.shopInventory.AddItem(pistol);
             shopManager.shopInventory.AddItem(automat);

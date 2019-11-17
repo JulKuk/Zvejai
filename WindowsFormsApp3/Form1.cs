@@ -14,6 +14,7 @@ using GameServer.Models.Strategy;
 using GameServer.Models.Builder;
 using GameServer.Models.Observer;
 using GameServer.Models.Decorator;
+using GameServer.Models.Facade;
 
 namespace WindowsFormsApp1
 {
@@ -28,6 +29,8 @@ namespace WindowsFormsApp1
         private Player P1;
         private bool createPlayer = false;
         private bool createdPlayer = false;
+
+        private ShopFacade shop = new ShopFacade();
 
 
         private bool playerHit = false;
@@ -115,6 +118,10 @@ namespace WindowsFormsApp1
                     playerHit = true;
                     textBox1.AppendText("Player got hit." + Environment.NewLine);
                     observer.CheckHealth = P1;
+                    break;
+                case Keys.P:
+                    textBox1.AppendText("Player opened shop." + Environment.NewLine);
+                    shop.Open(P1);
                     break;
                     //default:
                     //    _playerDirection = Direction.Stop;
