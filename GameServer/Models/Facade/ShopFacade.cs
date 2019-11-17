@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameServer.Models.Decorator;
 
 namespace GameServer.Models.Facade
 {
+
+    public enum weaponNames
+    { Bazuka, Automatas, Pistoletas, Sniperis }
+
     public class ShopFacade
     {
-        //cia susideti tuos testus kur destytojui rodem
 
         ShopManager shopManager = new ShopManager();
 
-        Item bazuka = new Item("Bazuka", new Bazooka());
-        Item automat = new Item("Automatas", new Automat());
-        Item pistol = new Item("Pistoletas", new Pistol());
-        Item sniper = new Item("Sniperis", new Sniper());
+        Item bazuka = new Item(weaponNames.Bazuka, 200);
+        Item automat = new Item(weaponNames.Automatas, 100);
+        Item pistol = new Item(weaponNames.Pistoletas, 50);
+        Item sniper = new Item(weaponNames.Sniperis, 300);
 
         public void Open(Player p)
         {
@@ -32,6 +36,8 @@ namespace GameServer.Models.Facade
 
     public class ShopManager
     {
+
+
         public ShopInventory shopInventory = new ShopInventory();
         public PlayerInventory playerInventory;
 
@@ -47,6 +53,38 @@ namespace GameServer.Models.Facade
         public void setPlayerGold(Player p)
         {
             this.playerInventory = new PlayerInventory(p.points);
+        }
+
+        public Ginklas SetPlayerWeapon(Player p, Item item)
+        {
+            switch (item.name)
+            {
+                case weaponNames.Bazuka:
+                    if (CanBuyItem(p, item))
+                    {
+                        return new Bazuka(p);
+                    }
+                    break;
+                case weaponNames.Automatas:
+                    if (CanBuyItem(p, item))
+                    {
+                        return new Automatas(p);
+                    }
+                    break;
+                case weaponNames.Pistoletas:
+                    if (CanBuyItem(p, item))
+                    {
+                        return new Pistoletas(p);
+                    }
+                    break;
+                case weaponNames.Sniperis:
+                    if (CanBuyItem(p, item))
+                    {
+                        return new Snaiperis(p);
+                    }
+                    break;
+            }
+            return new Pistoletas(p);
         }
     }
 
@@ -85,7 +123,7 @@ namespace GameServer.Models.Facade
 
         public bool PlayerHasEnoughMoney(Item item)
         {
-            if (playerGold >= item.weapon.cost)
+            if (playerGold >= item.price)
             {
                 return true;
             }
@@ -93,17 +131,17 @@ namespace GameServer.Models.Facade
         }
     }
 
-    public class Item : Weapon
+    public class Item
     {
-        public string name;
-        public Weapon weapon;
+        public weaponNames name;
+        public int price;
 
         Weapon b = new Bazooka();
 
-        public Item(string name, Weapon weapon)
+        public Item(weaponNames name, int price)
         {
             this.name = name;
-            this.weapon = weapon;
+            this.price = price;
         }
     }
 }
