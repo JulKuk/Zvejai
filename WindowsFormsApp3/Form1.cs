@@ -33,6 +33,7 @@ namespace WindowsFormsApp1
 
         private ShopFacade shop = new ShopFacade();
 
+        Gameboard board = new Gameboard();
 
         private bool playerHit = false;
         private CHP observer = new CHP();
@@ -88,6 +89,7 @@ namespace WindowsFormsApp1
             {
                 case Keys.N:
                     textBox1.AppendText("Started new game." + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.W:
                     //textBox1.AppendText("Player moved up." + Environment.NewLine);
@@ -111,7 +113,38 @@ namespace WindowsFormsApp1
                     break;
                 case Keys.C:
                     createPlayer = true;
+                    Ginklas ginklas = new Granata(P1);
                     textBox1.AppendText("Creating player:" + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D1:
+                    ginklas = new Granata(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D2:
+                    ginklas = new Pistoletas(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D3:
+                    ginklas = new Automatas(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D4:
+                    ginklas = new Snaiperis(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D5:
+                    ginklas = new Bazuka(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
                     e.Handled = true;
                     break;
                 case Keys.M:
