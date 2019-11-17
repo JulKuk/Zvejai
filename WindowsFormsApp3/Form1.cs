@@ -15,6 +15,7 @@ using GameServer.Models.Builder;
 using GameServer.Models.Observer;
 using GameServer.Models.Decorator;
 using GameServer.Models.Facade;
+using GameServer.Models.Command;
 
 namespace WindowsFormsApp1
 {
@@ -99,20 +100,24 @@ namespace WindowsFormsApp1
                     e.Handled = true;
                     break;
                 case Keys.W:
-                    //textBox1.AppendText("Player moved up." + Environment.NewLine);
+                    textBox1.AppendText("Command Up Executed" + Environment.NewLine);
                     _playerDirection = Direction.Up;
+                    e.Handled = true;
                     break;
                 case Keys.S:
-                    //textBox1.AppendText("Player moved down." + Environment.NewLine);
+                    textBox1.AppendText("Command Down Executed" + Environment.NewLine);
                     _playerDirection = Direction.Down;
+                    e.Handled = true;
                     break;
                 case Keys.A:
-                    //textBox1.AppendText("Player moved left." + Environment.NewLine);
+                    textBox1.AppendText("Command Left Executed" + Environment.NewLine);
                     _playerDirection = Direction.Left;
+                    e.Handled = true;
                     break;
                 case Keys.D:
-                    //textBox1.AppendText("Player moved right." + Environment.NewLine);
+                    textBox1.AppendText("Command Right Executed" + Environment.NewLine);
                     _playerDirection = Direction.Right;
+                    e.Handled = true;
                     break;
                 case Keys.Space:
                     textBox1.AppendText("Player shot." + Environment.NewLine);
@@ -308,55 +313,20 @@ namespace WindowsFormsApp1
                     switch (_playerDirection)
                     {
                         case Direction.Right:
-                            long nextCoord = P1.PosX + Convert.ToInt64(P1.speed);
-                            if (nextCoord <= 305){
-                                P1.PosX += Convert.ToInt64(P1.speed);
-                            }
-                            else
-                            {
-                                long diff = 305 - P1.PosX;
-                                P1.PosX += diff;
-                            }
-                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            RightCommand right = new RightCommand(P1);
+                            right.Execute();
                             break;
                         case Direction.Left:
-                            nextCoord = P1.PosX - Convert.ToInt64(P1.speed);
-                            if (nextCoord >= 5)
-                            {
-                                P1.PosX -= Convert.ToInt64(P1.speed);
-                            }
-                            else
-                            {
-                                long diff = P1.PosX - 5;
-                                P1.PosX -= diff;
-                            }
-                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            LeftCommand left = new LeftCommand(P1);
+                            left.Execute();
                             break;
                         case Direction.Up:
-                            nextCoord = P1.PosY - Convert.ToInt64(P1.speed);
-                            if (nextCoord >= 5)
-                            {
-                                P1.PosY -= Convert.ToInt64(P1.speed);
-                            }
-                            else
-                            {
-                                long diff = P1.PosY - 5;
-                                P1.PosY -= diff;
-                            }
-                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            UpCommand up = new UpCommand(P1);
+                            up.Execute();
                             break;
                         case Direction.Down:
-                            nextCoord = P1.PosY + Convert.ToInt64(P1.speed);
-                            if (nextCoord <= 305)
-                            {
-                                P1.PosY += Convert.ToInt64(P1.speed);
-                            }
-                            else
-                            {
-                                long diff = 305 - P1.PosY;
-                                P1.PosY += diff;
-                            }
-                            //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                            DownCommand down = new DownCommand(P1);
+                            down.Execute();
                             break;
                         case Direction.Stop:
                             P1.PosX += 0;
