@@ -31,6 +31,12 @@ namespace WindowsFormsApp1
         private bool createPlayer = false;
         private bool createdPlayer = false;
 
+        private List<Obsticale> obsticaless = new List<Obsticale>();
+        private Obsticale obs;
+        private bool obsticalescreate = false;
+        private bool obsCr = false;
+        // List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
+
         private ShopFacade shop = new ShopFacade();
 
         Gameboard board = new Gameboard();
@@ -89,6 +95,7 @@ namespace WindowsFormsApp1
             {
                 case Keys.N:
                     textBox1.AppendText("Started new game." + Environment.NewLine);
+                    obsticalescreate = true;
                     e.Handled = true;
                     break;
                 case Keys.W:
@@ -213,6 +220,66 @@ namespace WindowsFormsApp1
                 e.Graphics.FillRectangle(Brushes.Red, 0, 400, 200, 50);
                 e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
 
+            }
+
+            //abstract factory obsticales
+            if (obsticalescreate)
+            {
+                List<string> ObsColors = new List<string> { "R", "G", "B" };
+                List<int> Obscoordinates = new List<int>();
+
+
+                for (int i = 5; i < 300; i = i + 1)
+                {
+                    Obscoordinates.Add(i);
+                }
+                var random = new Random();
+                for (int i = 0; i < 60; i++)
+
+                {
+                    int index = random.Next(ObsColors.Count);
+                    obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
+                    obs.PosX = random.Next(Obscoordinates.Count);
+                    obs.PosY = random.Next(Obscoordinates.Count);
+                    obsticaless.Add(obs);
+
+                    if (index == 0)
+                    {
+                        // e.Graphics.FillRectangle(Brushes.Red, obsticaless.PosX, obsticaless.PosY, 10, 10);
+                    }
+                    if (index == 1)
+                    {
+                        // e.Graphics.FillRectangle(Brushes.Green, obsticaless.PosX, obsticaless.PosY, 10, 10);
+                    }
+                    if (index == 2)
+                    {
+                        // e.Graphics.FillRectangle(Brushes.Blue, obsticaless.PosX, obsticaless.PosY, 10, 10);
+                    }
+
+                }
+
+                obsCr = true;
+                obsticalescreate = false;
+                //obsticaless = new ObsticaleFacotry().CreateObsticale("R");
+
+            }
+            if (obsCr)
+            {
+                foreach (Obsticale item in obsticaless)
+                {
+                    if (item.Type == "Red")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Red, item.PosX, item.PosY, 10, 10);
+                    }
+                    if (item.Type == "Green")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Green, item.PosX, item.PosY, 10, 10);
+                    }
+                    if (item.Type == "Blue")
+                    {
+                        e.Graphics.FillRectangle(Brushes.Blue, item.PosX, item.PosY, 10, 10);
+                    }
+                }
             }
 
         }
