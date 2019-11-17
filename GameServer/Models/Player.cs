@@ -26,9 +26,9 @@ namespace GameServer.Models
             this.algorithm = algorithm;
         }
 
-        public void Move()
+        public void Move(float speed)
         {
-            algorithm.action(this);
+            algorithm.action(this,speed);
         }
 
         public override string SayHello()
