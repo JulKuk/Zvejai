@@ -33,6 +33,7 @@ namespace WindowsFormsApp1
 
         private ShopFacade shop = new ShopFacade();
 
+        Gameboard board = new Gameboard();
 
         private bool playerHit = false;
         private CHP observer = new CHP();
@@ -79,7 +80,6 @@ namespace WindowsFormsApp1
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
-
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -88,6 +88,7 @@ namespace WindowsFormsApp1
             {
                 case Keys.N:
                     textBox1.AppendText("Started new game." + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.W:
                     //textBox1.AppendText("Player moved up." + Environment.NewLine);
@@ -107,20 +108,55 @@ namespace WindowsFormsApp1
                     break;
                 case Keys.Space:
                     textBox1.AppendText("Player shot." + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.C:
                     createPlayer = true;
+                    Ginklas ginklas = new Granata(P1);
                     textBox1.AppendText("Creating player:" + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D1:
+                    ginklas = new Granata(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D2:
+                    ginklas = new Pistoletas(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D3:
+                    ginklas = new Automatas(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D4:
+                    ginklas = new Snaiperis(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.D5:
+                    ginklas = new Bazuka(P1);
+                    board.setGinklai(ginklas);
+                    textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.M:
                     P1.UpdateHealth(-1);
                     playerHit = true;
                     textBox1.AppendText("Player got hit." + Environment.NewLine);
                     observer.CheckHealth = P1;
+                    e.Handled = true;
                     break;
                 case Keys.P:
                     textBox1.AppendText("Player opened shop." + Environment.NewLine);
                     shop.Open(P1);
+                    e.Handled = true;
                     break;
                 case Keys.F1:
                     textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
@@ -137,8 +173,30 @@ namespace WindowsFormsApp1
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
-            _playerDirection = Direction.Stop;
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    textBox1.AppendText("Player stopped." + Environment.NewLine);
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.A:
+                    textBox1.AppendText("Player stopped." + Environment.NewLine);
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.S:
+                    textBox1.AppendText("Player stopped." + Environment.NewLine);
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.D:
+                    textBox1.AppendText("Player stopped." + Environment.NewLine);
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+            }
+            
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -149,7 +207,7 @@ namespace WindowsFormsApp1
             //zaidejo objektas
             if (createPlayer)
             {
-                
+
                 P1 = new PlayerFactory().GetPlayer();
                 P1.PosY = 10;
                 P1.PosX = 10;
@@ -175,7 +233,7 @@ namespace WindowsFormsApp1
                 e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
 
             }
-            
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -216,6 +274,6 @@ namespace WindowsFormsApp1
         }
 
         //note that paisyti reikia ant formos, o ne i picture
-       
+
     }
 }
