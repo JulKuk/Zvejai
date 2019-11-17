@@ -6,16 +6,16 @@ using GameServer.Models;
 
 namespace GameServer.Models.Decorator
 {
-    public class Pistoletas : Decorator
+    public class Automatas : Decorator
     {
-        public Pistoletas(Player player) : base(player)
+        public Automatas(Player player) : base(player)
         {
 
         }
 
         public override string specificAction()
         {
-            return "Pistoletas";
+            return "Automatas";
         }
 
         public override Boolean canShow()

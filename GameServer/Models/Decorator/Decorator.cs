@@ -8,7 +8,7 @@ namespace GameServer.Models.Decorator
 {
     public abstract class Decorator : Ginklas
     {
-        public Decorator (Player player/*, Ginklas inner*/) : base(player)
+        public Decorator(Player player/*, Ginklas inner*/) : base(player)
         {
             //this.innerElement = inner;
         }

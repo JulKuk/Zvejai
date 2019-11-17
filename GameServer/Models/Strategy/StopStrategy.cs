@@ -7,9 +7,9 @@ namespace GameServer.Models.Strategy
 {
     public class StopStrategy : Istrategy
     {
-        public void action(Player entity)
+        public void action(Player entity,float speed)
         {
-            entity.speed = 0.0f;
+            entity.speed = speed;
         }
     }
 }
