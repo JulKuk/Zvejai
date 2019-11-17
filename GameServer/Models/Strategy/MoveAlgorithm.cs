@@ -7,9 +7,9 @@ namespace GameServer.Models.Strategy
 {
     public class MoveAlgorithm : Istrategy
     {
-        public void action(Player entity)
+        public void action(Player entity, float speed)
         {
-            entity.speed = 10.0f;
+            entity.speed = speed;
         }
     }
 }
