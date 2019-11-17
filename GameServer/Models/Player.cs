@@ -10,6 +10,7 @@ namespace GameServer.Models
         public long PosX { get; set; }
         public long PosY { get; set; }
         public int health_points { get; set; }
+        public int points { get; set; }
 
         private List<Weapon> playerGuns = new List<Weapon>();
 
@@ -18,8 +19,6 @@ namespace GameServer.Models
         public float speed { get; set; }
 
         public Istrategy algorithm;
-
-        private List<HealthPointTracker> players = new List<HealthPointTracker>();
        
 
         public void setStrategy(Istrategy algorithm)

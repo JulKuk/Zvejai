@@ -30,6 +30,9 @@ namespace WindowsFormsApp1
         private bool createdPlayer = false;
 
 
+        private bool playerHit = false;
+        private CHP observer = new CHP();
+
         public Form1()
         {
             this.KeyPreview = true;
@@ -107,6 +110,12 @@ namespace WindowsFormsApp1
                     createPlayer = true;
                     textBox1.AppendText("Creating player:" + Environment.NewLine);
                     break;
+                case Keys.M:
+                    P1.UpdateHealth(-1);
+                    playerHit = true;
+                    textBox1.AppendText("Player got hit." + Environment.NewLine);
+                    observer.CheckHealth = P1;
+                    break;
                     //default:
                     //    _playerDirection = Direction.Stop;
                     //    break;
@@ -132,12 +141,26 @@ namespace WindowsFormsApp1
                 P1.PosY = 10;
                 P1.PosX = 10;
                 textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
-                e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
+                //e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
                 createdPlayer = true;
                 createPlayer = false;
+
+                //pridedamas i observeriu sarasa
+                observer.Attach(P1);
             }
             if (createdPlayer)
+            {
                 e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
+                e.Graphics.FillRectangle(Brushes.Red, 0, 400, 200, 50);
+            }
+
+            //observeriui
+            if (playerHit)
+            {
+                e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
+
+            }
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
