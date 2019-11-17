@@ -17,8 +17,11 @@ namespace GameServer.Models.AbstractFactory
             {
                 return new Obsticale { Type = "Green", Health_points = 30 };
             }
-
-            return new Obsticale { Type = "Blue", Health_points = 50 };
+            if (Type.Equals("B"))
+            {
+                return new Obsticale { Type = "Blue", Health_points = 50 };
+            }
+            return null;
         }
 
         public override Player CreatePlayer()

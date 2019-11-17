@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameServer\GameServer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="GameServer">
       <HintPath>..\GameServer\bin\Debug\netcoreapp2.1\GameServer.dll</HintPath>
     </Reference>
