@@ -107,37 +107,42 @@ namespace WindowsFormsApp1
                     break;
                 case Keys.Space:
                     textBox1.AppendText("Player shot." + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.C:
                     createPlayer = true;
                     textBox1.AppendText("Creating player:" + Environment.NewLine);
+                    e.Handled = true;
                     break;
                 case Keys.M:
                     P1.UpdateHealth(-1);
                     playerHit = true;
                     textBox1.AppendText("Player got hit." + Environment.NewLine);
                     observer.CheckHealth = P1;
+                    e.Handled = true;
                     break;
                 case Keys.P:
                     textBox1.AppendText("Player opened shop." + Environment.NewLine);
                     shop.Open(P1);
+                    e.Handled = true;
                     break;
                 case Keys.F1:
                     textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
                     P1.setStrategy(moveAlgorithm);
                     P1.Move(5.00f);
+                    e.Handled = true;
                     break;
                 case Keys.F2:
                     textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
                     P1.setStrategy(moveAlgorithm);
                     P1.Move(10.00f);
+                    e.Handled = true;
                     break;
             }
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
             _playerDirection = Direction.Stop;
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
