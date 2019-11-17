@@ -229,7 +229,7 @@ namespace WindowsFormsApp1
                 List<int> Obscoordinates = new List<int>();
 
 
-                for (int i = 5; i < 300; i = i + 1)
+                for (int i = 10; i < 305; i = i + 1)
                 {
                     Obscoordinates.Add(i);
                 }
@@ -241,7 +241,21 @@ namespace WindowsFormsApp1
                     obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
                     obs.PosX = random.Next(Obscoordinates.Count);
                     obs.PosY = random.Next(Obscoordinates.Count);
-                    obsticaless.Add(obs);
+                    int sk = 0;
+                    for (int j = 0; j < obsticaless.Count; j++)
+                    {
+                        if (obs.PosX >= (obsticaless[j].PosX -19) && obs.PosX <= (obsticaless[j].PosX + 20) && obs.PosY >= (obsticaless[j].PosY -19) && obs.PosY <= (obsticaless[j].PosY + 20))
+                        {
+                            sk++;
+                        }
+                    }
+                    if (sk == 0)
+                    {
+                        obsticaless.Add(obs);
+                    }
+
+
+
 
                     if (index == 0)
                     {
@@ -269,15 +283,15 @@ namespace WindowsFormsApp1
                 {
                     if (item.Type == "Red")
                     {
-                        e.Graphics.FillRectangle(Brushes.Red, item.PosX, item.PosY, 10, 10);
+                        e.Graphics.FillRectangle(Brushes.Red, item.PosX, item.PosY, 20, 20);
                     }
                     if (item.Type == "Green")
                     {
-                        e.Graphics.FillRectangle(Brushes.Green, item.PosX, item.PosY, 10, 10);
+                        e.Graphics.FillRectangle(Brushes.Green, item.PosX, item.PosY, 20, 20);
                     }
                     if (item.Type == "Blue")
                     {
-                        e.Graphics.FillRectangle(Brushes.Blue, item.PosX, item.PosY, 10, 10);
+                        e.Graphics.FillRectangle(Brushes.Blue, item.PosX, item.PosY, 20, 20);
                     }
                 }
             }
