@@ -152,6 +152,7 @@ namespace WindowsFormsApp1
                 
                 P1 = new PlayerFactory().GetPlayer();
                 P1.PosY = 10;
+
                 P1.PosX = 10;
                 textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
                 //e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
