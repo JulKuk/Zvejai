@@ -20,13 +20,37 @@ namespace GameServer.Models.Facade
         Item pistol = new Item(weaponNames.Pistoletas, 50);
         Item sniper = new Item(weaponNames.Sniperis, 300);
 
-        public void Open(Player p)
+        public Ginklas Open(Player p, weaponNames name)
         {
             shopManager.shopInventory.AddItem(bazuka);
             shopManager.shopInventory.AddItem(automat);
             shopManager.shopInventory.AddItem(pistol);
             shopManager.shopInventory.AddItem(sniper);
             shopManager.setPlayerGold(p);
+
+            Item wantedItem;
+
+            switch (name)
+            {
+                case weaponNames.Automatas:
+                    wantedItem = automat;
+                    break;
+                case weaponNames.Pistoletas:
+                    wantedItem = pistol;
+                    break;
+                case weaponNames.Bazuka:
+                    wantedItem = bazuka;
+                    break;
+                case weaponNames.Sniperis:
+                    wantedItem = sniper;
+                    break;
+                default:
+                    wantedItem = pistol;
+                    break;
+            }
+
+            return shopManager.SetPlayerWeapon(p, wantedItem);
+            
 
             //bool canSellPistol = shopManager.CanBuyItem(p, pistol);
 
