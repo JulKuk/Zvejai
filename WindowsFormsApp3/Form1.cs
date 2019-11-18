@@ -239,7 +239,9 @@ namespace WindowsFormsApp1
             {
                 List<string> ObsColors = new List<string> { "R", "G", "B" };
                 List<int> Obscoordinates = new List<int>();
-
+                Entity red = new ObsticaleFacotry().CreateObsticale("R");
+                Entity blue = new ObsticaleFacotry().CreateObsticale("B");
+                Entity green = new ObsticaleFacotry().CreateObsticale("G");
 
                 for (int i = 10; i < 305; i = i + 1)
                 {
@@ -250,7 +252,19 @@ namespace WindowsFormsApp1
 
                 {
                     int index = random.Next(ObsColors.Count);
-                    obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
+                    if (index == 0)
+                    {
+                        obs = (Obsticale)red.Clone();
+                    }
+                    if (index == 1)
+                    {
+                        obs = (Obsticale)green.Clone();
+                    }
+                    if (index == 2)
+                    {
+                        obs = (Obsticale)blue.Clone();
+                    }
+                    //obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
                     obs.PosX = random.Next(Obscoordinates.Count);
                     obs.PosY = random.Next(Obscoordinates.Count);
                     int sk = 0;
