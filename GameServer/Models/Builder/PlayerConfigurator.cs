@@ -21,30 +21,30 @@ namespace GameServer.Models.Builder
             return this;
         }
 
-        public PlayerConfigurator AddGranade()
-        {
-            WeaponsFacotry naujas;
-            naujas = new WeaponsFacotry();
-            Weapon Temp = naujas.CreateWeapon("");
+        //public PlayerConfigurator AddGranade()
+        //{
+        //    WeaponsFacotry naujas;
+        //    naujas = new WeaponsFacotry();
+        //    Weapon Temp = naujas.CreateWeapon("");
 
-            this.player.addGuns(Temp);
-            return this;
-        }
+        //    this.player.addGuns(Temp);
+        //    return this;
+        //}
 
-        public PlayerConfigurator AddPistol()
-        {
-            WeaponsFacotry naujas;
-            naujas = new WeaponsFacotry();
-            Weapon Temp = naujas.CreateWeapon("P");
+        //public PlayerConfigurator AddPistol()
+        //{
+        //    WeaponsFacotry naujas;
+        //    naujas = new WeaponsFacotry();
+        //    Weapon Temp = naujas.CreateWeapon("P");
 
-            this.player.addGuns(Temp);
-            return this;
-        }
+        //    this.player.addGuns(Temp);
+        //    return this;
+        //}
 
-        public Player build()
-        {
-            Console.WriteLine("Created player: " + player.health_points + " pistolestas " + player.getPlayerGuns()[1].damage);
-            return player;
-        }
+        //public Player build()
+        //{
+        //    Console.WriteLine("Created player: " + player.health_points + " pistolestas " + player.getPlayerGuns()[1].damage);
+        //    return player;
+        //}
     }
 }

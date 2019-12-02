@@ -4,7 +4,7 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServer", "GameServer\GameServer.csproj", "{EAF2A45A-CE1F-45B7-852D-F1540BAB7E5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp3", "WindowsFormsApp3\WindowsFormsApp3.csproj", "{ADE9D042-3CAF-4D53-905B-F9D68CBFE2DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsApp3", "WindowsFormsApp3\WindowsFormsApp3.csproj", "{ADE9D042-3CAF-4D53-905B-F9D68CBFE2DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,11 +16,14 @@ using GameServer.Models.Observer;
 using GameServer.Models.Decorator;
 using GameServer.Models.Facade;
 using GameServer.Models.Command;
+using WindowsFormsApp3;
+using Newtonsoft.Json;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        public HttpClient client = new HttpClient();
         enum Direction
         {
             Left, Right, Up, Down, Stop
@@ -45,7 +48,7 @@ namespace WindowsFormsApp1
         private bool playerHit = false;
         private CHP observer = new CHP();
 
-        public Form1()
+        public Form1(  )
         {
             this.KeyPreview = true;
 
@@ -57,15 +60,7 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Player player = new Player
-            //{
-            //    id = 1,
-            //    Name = "a",
-            //    health_points = 10,
-            //    speed = 5,
-            //    PosX = 10,
-            //    PosY = 10
-            //};
+            Connect();
         }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
@@ -88,6 +83,20 @@ namespace WindowsFormsApp1
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
 
+        }
+        private async void Connect()
+        {
+            Sniper g = new Sniper { ammo = 10, name = "AWP", damage = 75, cost = 900 };
+            Player p = new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, defaultGun = g};
+
+            var s = new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/player", new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            
+
+            // return URI of the created resource.
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -204,7 +213,7 @@ namespace WindowsFormsApp1
                 P1.PosY = 10;
 
                 P1.PosX = 10;
-                textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
+                //textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
                 //e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
                 createdPlayer = true;
                 createPlayer = false;

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using GameServer.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GameServer
 {
@@ -27,7 +28,6 @@ namespace GameServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<PlayerContext>(opt => opt.UseInMemoryDatabase("PlayersList"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

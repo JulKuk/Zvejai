@@ -55,16 +55,16 @@ namespace GameServer.Models
             Console.WriteLine(this.Name + " health is: " + this.health_points);
         }
 
-        public void addGuns(Weapon weapon)
-        {
-            playerGuns.Add(weapon);
-            defaultGun = weapon;
-        }
+        //public void addGuns(Weapon weapon)
+        //{
+        //    playerGuns.Add(weapon);
+        //    defaultGun = weapon;
+        //}
 
-        public List<Weapon> getPlayerGuns()
-        {
-            return playerGuns;
-        }
+        //public List<Weapon> getPlayerGuns()
+        //{
+        //    return playerGuns;
+        //}
         
     }
 }

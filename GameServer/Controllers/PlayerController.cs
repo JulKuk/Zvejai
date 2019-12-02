@@ -26,19 +26,19 @@ namespace GameServer.Controllers
         {
             _context = context;
 
-            if (_context.Players.Count() == 0)
-            {
-                // Create a new Player if collection is empty,
-                // which means you can't delete all Players.
-                for (int i = 0; i < 4; i++)
-                {
-                    Qty++;
-                    Player p = new Player { Name = "Player-" + Qty, health_points = 100, PosX = 0, PosY = 0 };
-                    _context.Players.Add(p);
-                }
+            //if (_context.Players.Count() == 0)
+            //{
+            //    // Create a new Player if collection is empty,
+            //    // which means you can't delete all Players.
+            //    for (int i = 0; i < 4; i++)
+            //    {
+            //        Qty++;
+            //        Player p = new Player { Name = "Player-" + Qty, health_points = 100, PosX = 0, PosY = 0 };
+            //        _context.Players.Add(p);
+            //    }
             
-                _context.SaveChanges();
-            }
+            //    _context.SaveChanges();
+            //}
         }
 
 
@@ -63,13 +63,13 @@ namespace GameServer.Controllers
         // POST api/player
         [HttpPost]
         //public string Create(Player player)
-        public ActionResult<Player> Create([FromBody] Player player)
+        public ActionResult<Player> Create(Player player)
         {
             _context.Players.Add(player);
             _context.SaveChanges();
 
             //return Ok(); //"created - ok"; 
-            return CreatedAtRoute("GetPlayer", new { id = player.id }, player);
+            return player;
         }
 
 
