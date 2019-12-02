@@ -6,9 +6,9 @@ using GameServer.Models.Decorator;
 
 namespace GameServer.Models
 {
-    public abstract class Weapon : Entity
+    public class Weapon : Entity
     {
-        
+        public long PlayerID { get; set; }
         public float cost { get; set; }
         public int damage { get; set; }
         public int ammo { get; set; }

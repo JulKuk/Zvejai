@@ -18,6 +18,7 @@ using GameServer.Models.Facade;
 using GameServer.Models.Command;
 using WindowsFormsApp3;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace WindowsFormsApp1
 {
@@ -86,13 +87,12 @@ namespace WindowsFormsApp1
         }
         private async void Connect()
         {
-            Sniper g = new Sniper { ammo = 10, name = "AWP", damage = 75, cost = 900 };
-            Player p = new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, defaultGun = g};
+            Sniper g = new Sniper { ammo = 10, name = "AWP", damage = 75, cost = 900, id = 2, PlayerID = 2 };
+            Player p = new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, Weapon =  g, id = 2,  };
 
             var s = new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/player", new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
-
             // Deserialize the updated product from the response body.
             
 

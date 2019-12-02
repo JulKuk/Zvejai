@@ -2,9 +2,11 @@
 using System;
 using GameServer.Models.Observer;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GameServer.Models
 {
-    public class Player :Entity
+    public class Player : Entity
     {
         public string Name { get; set; }
         public long PosX { get; set; }
@@ -12,9 +14,9 @@ namespace GameServer.Models
         public int health_points { get; set; }
         public int points { get; set; }
 
-        private List<Weapon> playerGuns = new List<Weapon>();
+        public List<Weapon> Weapons { get; set; }
 
-        public Weapon defaultGun { get; set; }
+        public Weapon Weapon { get; set; }
 
         public float speed { get; set; }
 

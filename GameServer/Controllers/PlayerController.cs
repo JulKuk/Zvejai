@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GameServer.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -44,9 +46,9 @@ namespace GameServer.Controllers
 
         // GET api/player
         [HttpGet]
-        public ActionResult<IEnumerable<Player>> GetAll()
+        public ActionResult<ICollection<Player>> GetAll()
         {
-            return _context.Players.ToList();
+            return _context.Players.Include(player => player.Weapon).ToList();
         }
 
         // GET api/player/5
@@ -66,6 +68,7 @@ namespace GameServer.Controllers
         public ActionResult<Player> Create(Player player)
         {
             _context.Players.Add(player);
+            _context.Weapons.Add(player.Weapon);
             _context.SaveChanges();
 
             //return Ok(); //"created - ok"; 
