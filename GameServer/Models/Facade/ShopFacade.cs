@@ -2,55 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GameServer.Models.Decorator;
 
 namespace GameServer.Models.Facade
 {
-
-    public enum weaponNames
-    { Bazuka, Automatas, Pistoletas, Sniperis }
-
     public class ShopFacade
     {
+        //cia susideti tuos testus kur destytojui rodem
 
         ShopManager shopManager = new ShopManager();
 
-        Item bazuka = new Item(weaponNames.Bazuka, 200);
-        Item automat = new Item(weaponNames.Automatas, 100);
-        Item pistol = new Item(weaponNames.Pistoletas, 50);
-        Item sniper = new Item(weaponNames.Sniperis, 300);
+        Item bazuka = new Item("Bazuka", new Bazooka());
+        Item automat = new Item("Automatas", new Automat());
+        Item pistol = new Item("Pistoletas", new Pistol());
+        Item sniper = new Item("Sniperis", new Sniper());
 
-        public Ginklas Open(Player p, weaponNames name)
+        public void Open(Player p)
         {
             shopManager.shopInventory.AddItem(bazuka);
             shopManager.shopInventory.AddItem(automat);
             shopManager.shopInventory.AddItem(pistol);
             shopManager.shopInventory.AddItem(sniper);
             shopManager.setPlayerGold(p);
-
-            Item wantedItem;
-
-            switch (name)
-            {
-                case weaponNames.Automatas:
-                    wantedItem = automat;
-                    break;
-                case weaponNames.Pistoletas:
-                    wantedItem = pistol;
-                    break;
-                case weaponNames.Bazuka:
-                    wantedItem = bazuka;
-                    break;
-                case weaponNames.Sniperis:
-                    wantedItem = sniper;
-                    break;
-                default:
-                    wantedItem = pistol;
-                    break;
-            }
-
-            return shopManager.SetPlayerWeapon(p, wantedItem);
-            
 
             //bool canSellPistol = shopManager.CanBuyItem(p, pistol);
 
@@ -60,8 +32,6 @@ namespace GameServer.Models.Facade
 
     public class ShopManager
     {
-
-
         public ShopInventory shopInventory = new ShopInventory();
         public PlayerInventory playerInventory;
 
@@ -77,38 +47,6 @@ namespace GameServer.Models.Facade
         public void setPlayerGold(Player p)
         {
             this.playerInventory = new PlayerInventory(p.points);
-        }
-
-        public Ginklas SetPlayerWeapon(Player p, Item item)
-        {
-            switch (item.name)
-            {
-                case weaponNames.Bazuka:
-                    if (CanBuyItem(p, item))
-                    {
-                        return new Bazuka(p);
-                    }
-                    break;
-                case weaponNames.Automatas:
-                    if (CanBuyItem(p, item))
-                    {
-                        return new Automatas(p);
-                    }
-                    break;
-                case weaponNames.Pistoletas:
-                    if (CanBuyItem(p, item))
-                    {
-                        return new Pistoletas(p);
-                    }
-                    break;
-                case weaponNames.Sniperis:
-                    if (CanBuyItem(p, item))
-                    {
-                        return new Snaiperis(p);
-                    }
-                    break;
-            }
-            return new Pistoletas(p);
         }
     }
 
@@ -147,7 +85,7 @@ namespace GameServer.Models.Facade
 
         public bool PlayerHasEnoughMoney(Item item)
         {
-            if (playerGold >= item.price)
+            if (playerGold >= item.weapon.cost)
             {
                 return true;
             }
@@ -155,17 +93,17 @@ namespace GameServer.Models.Facade
         }
     }
 
-    public class Item
+    public class Item : Weapon
     {
-        public weaponNames name;
-        public int price;
+        public string name;
+        public Weapon weapon;
 
         Weapon b = new Bazooka();
 
-        public Item(weaponNames name, int price)
+        public Item(string name, Weapon weapon)
         {
             this.name = name;
-            this.price = price;
+            this.weapon = weapon;
         }
     }
 }

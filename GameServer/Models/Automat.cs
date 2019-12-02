@@ -12,9 +12,5 @@ namespace GameServer.Models
         {
             return name;
         }
-        public override Entity Clone()
-        {
-            return (Entity)this.MemberwiseClone();
-        }
     }
 }

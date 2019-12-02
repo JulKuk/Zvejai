@@ -29,8 +29,6 @@ namespace WindowsFormsApp1
             Left, Right, Up, Down, Stop
         }
 
-        
-
         private Direction _playerDirection;
         MoveAlgorithm moveAlgorithm = new MoveAlgorithm();
         private Player P1;
@@ -62,7 +60,8 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //};        }
+            Connect();
+        }
 
         private void pictureBox1_Click_1(object sender, EventArgs e)
         {
@@ -176,6 +175,11 @@ namespace WindowsFormsApp1
                     observer.CheckHealth = P1;
                     e.Handled = true;
                     break;
+                case Keys.P:
+                    textBox1.AppendText("Player opened shop." + Environment.NewLine);
+                    shop.Open(P1);
+                    e.Handled = true;
+                    break;
                 case Keys.F1:
                     textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
                     P1.setStrategy(moveAlgorithm);
@@ -220,12 +224,6 @@ namespace WindowsFormsApp1
             }
             if (createdPlayer)
             {
-                //parduotuve atsidaro
-                label1.Visible = true;
-                label2.Visible = true;
-                label3.Visible = true;
-                label4.Visible = true;
-
                 e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
                 e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
             }
@@ -243,9 +241,7 @@ namespace WindowsFormsApp1
             {
                 List<string> ObsColors = new List<string> { "R", "G", "B" };
                 List<int> Obscoordinates = new List<int>();
-                Entity red = new ObsticaleFacotry().CreateObsticale("R");
-                Entity blue = new ObsticaleFacotry().CreateObsticale("B");
-                Entity green = new ObsticaleFacotry().CreateObsticale("G");
+
 
                 for (int i = 10; i < 305; i = i + 1)
                 {
@@ -256,19 +252,7 @@ namespace WindowsFormsApp1
 
                 {
                     int index = random.Next(ObsColors.Count);
-                    if (index == 0)
-                    {
-                        obs = (Obsticale)red.Clone();
-                    }
-                    if (index == 1)
-                    {
-                        obs = (Obsticale)green.Clone();
-                    }
-                    if (index == 2)
-                    {
-                        obs = (Obsticale)blue.Clone();
-                    }
-                    //obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
+                    obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
                     obs.PosX = random.Next(Obscoordinates.Count);
                     obs.PosY = random.Next(Obscoordinates.Count);
                     int sk = 0;
@@ -363,42 +347,6 @@ namespace WindowsFormsApp1
 
             }
             Invalidate();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-            if (createdPlayer)
-            {
-                board.setGinklai(shop.Open(P1, weaponNames.Automatas));
-                textBox1.AppendText("Player bought automatas." + Environment.NewLine);
-            }            
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            if (createdPlayer)
-            {
-                board.setGinklai(shop.Open(P1, weaponNames.Sniperis));
-                textBox1.AppendText("Player bought sniper." + Environment.NewLine);
-            }            
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-            if (createdPlayer)
-            {
-                board.setGinklai(shop.Open(P1, weaponNames.Bazuka));
-                textBox1.AppendText("Player bought bazuka." + Environment.NewLine);
-            }            
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-            if (createdPlayer)
-            {
-                board.setGinklai(shop.Open(P1, weaponNames.Pistoletas));
-                textBox1.AppendText("Player bought pistol." + Environment.NewLine);
-            }            
         }
 
         //note that paisyti reikia ant formos, o ne i picture

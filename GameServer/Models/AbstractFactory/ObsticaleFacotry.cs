@@ -39,5 +39,11 @@ namespace GameServer.Models.AbstractFactory
             throw new NotImplementedException();
         }
 
+        public override Obsticale Clone()
+        {
+           // Obsticale naujas = this.MemberwiseClone() as Obsticale;
+
+            return this.MemberwiseClone() as Obsticale;
+        }
     }
 }
