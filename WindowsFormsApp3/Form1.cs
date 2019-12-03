@@ -24,6 +24,8 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        //WeBAPI
+        public string path = "https://localhost:44371/";
         //FaCtory
         private PlayerFactory PlayerFactory = new PlayerFactory();
         //Http Klientas jsonui siusti
@@ -35,8 +37,11 @@ namespace WindowsFormsApp1
 
         private Direction _playerDirection;
         MoveAlgorithm moveAlgorithm = new MoveAlgorithm();
-        private List<Player> Players = new List<Player>();
+
+        public ICollection<Player> Players;
+
         private Player CurrentPlayer;
+
         private bool createPlayer = false;
         private bool createdPlayer = false;
 
@@ -63,8 +68,21 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        async Task<ICollection<Player>> GetAllPlayerAsync(string path)
         {
+            ICollection<Player> players = null;
+            HttpResponseMessage response = await client.GetAsync(path + "api/player");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                players = JsonConvert.DeserializeObject<ICollection<Player>>(content);
+            }
+            return players;
+        }
+
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+            Players = await GetAllPlayerAsync(path);
             Connect();
         }
 
@@ -89,14 +107,25 @@ namespace WindowsFormsApp1
         {
 
         }
+        async Task<Uri> CreatePlayerAsync(Player player)
+        {
+            var s = new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/player", new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            var player2 = await response.Content.ReadAsStringAsync();
+
+
+            // return URI of the created resource.
+            return response.Headers.Location;
+        }
         private async void Connect()
         {
             if(Players.Count == 0)
             {
                 Player p = PlayerFactory.GetPlayer();
-                var s = new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/player", new StringContent(JsonConvert.SerializeObject(p), Encoding.UTF8, "application/json"));
-                response.EnsureSuccessStatusCode();
+                var url = await CreatePlayerAsync(p);
                 textBox1.AppendText("Player 1 Connected.");
             }
             else if (Players.Count == 1)
