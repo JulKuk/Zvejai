@@ -56,8 +56,9 @@ namespace GameServer.Controllers
         [HttpGet("{id}", Name = "GetPlayer")]
         public ActionResult<Player> GetById(long id)
         {
-            Player p = _context.Players.Find(id);
-            if(p == null){
+            List<Player> temp = _context.Players.Include(player => player.Weapon).Include(player => player.Weapons).ToList();
+            Player p = temp.Find(plaeyr => plaeyr.id == id);
+            if (p == null){
                 return  NotFound("player not found");
             }
             return p;

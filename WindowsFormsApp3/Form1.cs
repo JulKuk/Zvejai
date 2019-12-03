@@ -39,11 +39,12 @@ namespace WindowsFormsApp1
         MoveAlgorithm moveAlgorithm = new MoveAlgorithm();
 
         public ICollection<Player> Players;
+        public Player P1;
+        public Player P2;
 
         private Player CurrentPlayer;
 
-        private bool createPlayer = false;
-        private bool createdPlayer = false;
+        private bool BothConnected = false;
 
         private List<Obsticale> obsticaless = new List<Obsticale>();
         private Obsticale obs;
@@ -76,6 +77,18 @@ namespace WindowsFormsApp1
             {
                 var content = await response.Content.ReadAsStringAsync();
                 players = JsonConvert.DeserializeObject<ICollection<Player>>(content);
+            }
+            return players;
+        }
+
+        async Task<Player> GetPlayerAsync(string path,int id)
+        {
+            Player players = null;
+            HttpResponseMessage response = await client.GetAsync(path + "api/player/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                players = JsonConvert.DeserializeObject<Player>(content);
             }
             return players;
         }
@@ -125,12 +138,21 @@ namespace WindowsFormsApp1
             if(Players.Count == 0)
             {
                 Player p = PlayerFactory.GetPlayer();
+                p.PosX = 20;
+                p.PosY = 50;
                 var url = await CreatePlayerAsync(p);
+                CurrentPlayer = p;
                 textBox1.AppendText("Player 1 Connected.");
             }
             else if (Players.Count == 1)
             {
+                Player p = PlayerFactory.GetPlayer();
+                p.PosX = 50;
+                p.PosY = 200;
+                var url = await CreatePlayerAsync(p);
+                CurrentPlayer = p;
                 textBox1.AppendText("Player 2 Connected.");
+                BothConnected = true;
             }
 
             
@@ -240,16 +262,23 @@ namespace WindowsFormsApp1
         {
             _playerDirection = Direction.Stop;
         }
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private async void Form1_Paint(object sender, PaintEventArgs e)
         {
-            ////pagal nustatymus zaidimo laukas
-            //e.Graphics.FillRectangle(Brushes.Black, 0, 0, 330, 330);
-            //e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
-
+            //pagal nustatymus zaidimo laukas
+            e.Graphics.FillRectangle(Brushes.Black, 0, 0, 330, 330);
+            e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
+            if(P1 != null)
+            {
+                e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 10, 10);
+            }
+            if(P2 != null)
+            {
+                e.Graphics.FillRectangle(Brushes.Red, P2.PosX, P2.PosY, 10, 10);
+            }
             ////zaidejo objektas
             //if (createPlayer)
             //{
-                
+
             //    P1 = new PlayerFactory().GetPlayer();
             //    P1.PosY = 10;
 
@@ -353,8 +382,10 @@ namespace WindowsFormsApp1
 
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private async void timer1_Tick(object sender, EventArgs e)
         {
+            P1 = await GetPlayerAsync(path, 1);
+            P2 = await GetPlayerAsync(path, 2);
             //if (createdPlayer)
             //{
             //    //pagal nustatymus padaryti zaidimo lauka
@@ -387,7 +418,7 @@ namespace WindowsFormsApp1
             //    }
 
             //}
-            //Invalidate();
+            Invalidate();
         }
 
         //note that paisyti reikia ant formos, o ne i picture
