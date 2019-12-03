@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using GameServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GameServer.Controllers
@@ -38,7 +37,7 @@ namespace GameServer.Controllers
             //        Player p = new Player { Name = "Player-" + Qty, health_points = 100, PosX = 0, PosY = 0 };
             //        _context.Players.Add(p);
             //    }
-            
+
             //    _context.SaveChanges();
             //}
         }
@@ -58,8 +57,8 @@ namespace GameServer.Controllers
         {
             List<Player> temp = _context.Players.Include(player => player.Weapon).Include(player => player.Weapons).ToList();
             Player p = temp.Find(plaeyr => plaeyr.id == id);
-            if (p == null){
-                return  NotFound("player not found");
+            if (p == null) {
+                return NotFound("player not found");
             }
             return p;
         }
@@ -78,20 +77,22 @@ namespace GameServer.Controllers
         }
 
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Update(long id, [FromBody] Player p)
+        public IActionResult Update(long id, Player p)
         {
-            var pp = _context.Players.Find(id);
+            List<Player> temp = _context.Players.Include(player => player.Weapon).Include(player => player.Weapons).ToList();
+            var pp = temp.Find(plaeyr => plaeyr.id == id);
             if (pp == null)
             {
                 return NotFound();
             }
 
+            pp.health_points = p.health_points;
             pp.Name = p.Name;
+            pp.points = p.points;
             pp.PosX = p.PosX;
             pp.PosY = p.PosY;
-            pp.health_points = p.health_points;
+            pp.speed = p.speed;
 
             _context.Players.Update(pp);
             _context.SaveChanges();
@@ -100,19 +101,19 @@ namespace GameServer.Controllers
         }
 
         [HttpPatch]
-        public IActionResult PartialUpdate([FromBody] Coordinates request)
+        public IActionResult PartialUpdate(Player player)
         {
-            var player = _context.Players.Find(request.Id);
-            if (player == null)
+            var play1 = _context.Players.Find(player.id);
+            if (play1 == null)
             {
                 return NotFound();
             }
             else
             {
-                player.PosX = request.PosX;
-                player.PosY = request.PosY;
+                play1.PosX = player.PosX;
+                play1.PosY = player.PosY;
 
-                _context.Players.Update(player);
+                _context.Players.Update(play1);
                 _context.SaveChanges();
             }
             return Ok();

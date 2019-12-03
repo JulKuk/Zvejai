@@ -44,7 +44,7 @@ namespace WindowsFormsApp1
 
         private Player CurrentPlayer;
 
-        private bool BothConnected = false;
+        private bool P1Connected,P2Connected = false;
 
         private List<Obsticale> obsticaless = new List<Obsticale>();
         private Obsticale obs;
@@ -133,6 +133,20 @@ namespace WindowsFormsApp1
             // return URI of the created resource.
             return response.Headers.Location;
         }
+
+        async Task<Uri> UpdatePlayerAsync(Player player)
+        {
+            var s = new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PutAsync(path +"api/player/"+player.id, new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated product from the response body.
+            var player2 = await response.Content.ReadAsStringAsync();
+
+
+            // return URI of the created resource.
+            return response.Headers.Location;
+        }
         private async void Connect()
         {
             if(Players.Count == 0)
@@ -140,19 +154,22 @@ namespace WindowsFormsApp1
                 Player p = PlayerFactory.GetPlayer();
                 p.PosX = 20;
                 p.PosY = 50;
+                p.speed = 10;
                 var url = await CreatePlayerAsync(p);
-                CurrentPlayer = p;
+                CurrentPlayer = await GetPlayerAsync(path,1);
                 textBox1.AppendText("Player 1 Connected.");
+                P1Connected = true;
             }
             else if (Players.Count == 1)
             {
                 Player p = PlayerFactory.GetPlayer();
                 p.PosX = 50;
                 p.PosY = 200;
+                p.speed = 10;
                 var url = await CreatePlayerAsync(p);
-                CurrentPlayer = p;
+                CurrentPlayer = await GetPlayerAsync(path, 2);
                 textBox1.AppendText("Player 2 Connected.");
-                BothConnected = true;
+                P2Connected = true;
             }
 
             
@@ -164,99 +181,99 @@ namespace WindowsFormsApp1
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            //switch (e.KeyCode)
-            //{
-            //    case Keys.N:
-            //        textBox1.AppendText("Started new game." + Environment.NewLine);
-            //        obsticalescreate = true;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.W:
-            //        textBox1.AppendText("Command Up Executed" + Environment.NewLine);
-            //        _playerDirection = Direction.Up;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.S:
-            //        textBox1.AppendText("Command Down Executed" + Environment.NewLine);
-            //        _playerDirection = Direction.Down;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.A:
-            //        textBox1.AppendText("Command Left Executed" + Environment.NewLine);
-            //        _playerDirection = Direction.Left;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D:
-            //        textBox1.AppendText("Command Right Executed" + Environment.NewLine);
-            //        _playerDirection = Direction.Right;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.Space:
-            //        textBox1.AppendText("Player shot." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.C:
-            //        createPlayer = true;
-            //        Ginklas ginklas = new Granata(P1);
-            //        textBox1.AppendText("Creating player:" + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D1:
-            //        ginklas = new Granata(P1);
-            //        board.setGinklai(ginklas);
-            //        textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D2:
-            //        ginklas = new Pistoletas(P1);
-            //        board.setGinklai(ginklas);
-            //        textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D3:
-            //        ginklas = new Automatas(P1);
-            //        board.setGinklai(ginklas);
-            //        textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D4:
-            //        ginklas = new Snaiperis(P1);
-            //        board.setGinklai(ginklas);
-            //        textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.D5:
-            //        ginklas = new Bazuka(P1);
-            //        board.setGinklai(ginklas);
-            //        textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.M:
-            //        P1.UpdateHealth(-1);
-            //        playerHit = true;
-            //        textBox1.AppendText("Player got hit." + Environment.NewLine);
-            //        observer.CheckHealth = P1;
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.P:
-            //        textBox1.AppendText("Player opened shop." + Environment.NewLine);
-            //        shop.Open(P1);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.F1:
-            //        textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
-            //        P1.setStrategy(moveAlgorithm);
-            //        P1.Move(5.00f);
-            //        e.Handled = true;
-            //        break;
-            //    case Keys.F2:
-            //        textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
-            //        P1.setStrategy(moveAlgorithm);
-            //        P1.Move(10.00f);
-            //        e.Handled = true;
-            //        break;
-            //}
-        }
+            switch (e.KeyCode)
+            {
+                //case Keys.N:
+                //    textBox1.AppendText("Started new game." + Environment.NewLine);
+                //    obsticalescreate = true;
+                //    e.Handled = true;
+                //    break;
+                case Keys.W:
+                    textBox1.AppendText("Command Up Executed" + Environment.NewLine);
+                    _playerDirection = Direction.Up;
+                    e.Handled = true;
+                    break;
+                case Keys.S:
+                    textBox1.AppendText("Command Down Executed" + Environment.NewLine);
+                    _playerDirection = Direction.Down;
+                    e.Handled = true;
+                    break;
+                case Keys.A:
+                    textBox1.AppendText("Command Left Executed" + Environment.NewLine);
+                    _playerDirection = Direction.Left;
+                    e.Handled = true;
+                    break;
+                case Keys.D:
+                    textBox1.AppendText("Command Right Executed" + Environment.NewLine);
+                    _playerDirection = Direction.Right;
+                    e.Handled = true;
+                    break;
+                    //    case Keys.Space:
+                    //        textBox1.AppendText("Player shot." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.C:
+                    //        createPlayer = true;
+                    //        Ginklas ginklas = new Granata(P1);
+                    //        textBox1.AppendText("Creating player:" + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D1:
+                    //        ginklas = new Granata(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D2:
+                    //        ginklas = new Pistoletas(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D3:
+                    //        ginklas = new Automatas(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D4:
+                    //        ginklas = new Snaiperis(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D5:
+                    //        ginklas = new Bazuka(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.M:
+                    //        P1.UpdateHealth(-1);
+                    //        playerHit = true;
+                    //        textBox1.AppendText("Player got hit." + Environment.NewLine);
+                    //        observer.CheckHealth = P1;
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.P:
+                    //        textBox1.AppendText("Player opened shop." + Environment.NewLine);
+                    //        shop.Open(P1);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.F1:
+                    //        textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
+                    //        P1.setStrategy(moveAlgorithm);
+                    //        P1.Move(5.00f);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.F2:
+                    //        textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
+                    //        P1.setStrategy(moveAlgorithm);
+                    //        P1.Move(10.00f);
+                    //        e.Handled = true;
+                    //        break;
+             }
+            }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
@@ -388,40 +405,53 @@ namespace WindowsFormsApp1
             P2 = await GetPlayerAsync(path, 2);
             //if (createdPlayer)
             //{
-            //    //pagal nustatymus padaryti zaidimo lauka
-            //    if (P1.PosX >= 5 && P1.PosX <= 305 && P1.PosY >= 5 && P1.PosY <= 305)
-            //    {
-            //        switch (_playerDirection)
-            //        {
-            //            case Direction.Right:
-            //                RightCommand right = new RightCommand(P1);
-            //                right.Execute();
-            //                break;
-            //            case Direction.Left:
-            //                LeftCommand left = new LeftCommand(P1);
-            //                left.Execute();
-            //                break;
-            //            case Direction.Up:
-            //                UpCommand up = new UpCommand(P1);
-            //                up.Execute();
-            //                break;
-            //            case Direction.Down:
-            //                DownCommand down = new DownCommand(P1);
-            //                down.Execute();
-            //                break;
-            //            case Direction.Stop:
-            //                P1.PosX += 0;
-            //                P1.PosY += 0;
-            //                //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
-            //                break;
-            //        }
-            //    }
+            //pagal nustatymus padaryti zaidimo lauka
+            if (P1Connected)
+            {
+               var Random2 = PlayerMovement(P1);
+               await UpdatePlayerAsync(Random2);
+            }
+            if(P2Connected)
+            {
+                var Random = PlayerMovement(P2);
+                await UpdatePlayerAsync(Random);
+            }
 
             //}
             Invalidate();
         }
 
         //note that paisyti reikia ant formos, o ne i picture
-
+        public Player PlayerMovement(Player CurrentPlayer)
+        {
+            if (CurrentPlayer.PosX >= 5 && CurrentPlayer.PosX <= 305 && CurrentPlayer.PosY >= 5 && CurrentPlayer.PosY <= 305)
+            {
+                switch (_playerDirection)
+                {
+                    case Direction.Right:
+                        RightCommand right = new RightCommand(CurrentPlayer);
+                        right.Execute();
+                        break;
+                    case Direction.Left:
+                        LeftCommand left = new LeftCommand(CurrentPlayer);
+                        left.Execute();
+                        break;
+                    case Direction.Up:
+                        UpCommand up = new UpCommand(CurrentPlayer);
+                        up.Execute();
+                        break;
+                    case Direction.Down:
+                        DownCommand down = new DownCommand(CurrentPlayer);
+                        down.Execute();
+                        break;
+                    case Direction.Stop:
+                        CurrentPlayer.PosX += 0;
+                        CurrentPlayer.PosY += 0;
+                        //textBox1.AppendText("x: " + P1.PosX + " y: " + P1.PosY + " " + Environment.NewLine);
+                        break;
+                }
+            }
+            return CurrentPlayer;
+        }
     }
 }
