@@ -26,10 +26,8 @@ namespace GameServer.Models.AbstractFactory
 
         public override Player GetPlayer()
         {
-            //PlayerBuilder player = new PlayerBuilder();
-            //return player.startPlayer().AddGranade().AddHealthPoints().AddPistol().build();
-            ////return new Player();
-            return null;
+            PlayerBuilder player = new PlayerBuilder();
+            return player.startPlayer().AddGranade().AddHealthPoints().AddPistol().build();
         }
 
         public override Obsticale Clone()

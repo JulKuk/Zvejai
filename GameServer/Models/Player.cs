@@ -14,7 +14,7 @@ namespace GameServer.Models
         public int health_points { get; set; }
         public int points { get; set; }
 
-        public List<Weapon> Weapons { get; set; }
+        public List<Weapon> Weapons { get; set; } = new List<Weapon>();
 
         public Weapon Weapon { get; set; }
 
@@ -57,16 +57,16 @@ namespace GameServer.Models
             Console.WriteLine(this.Name + " health is: " + this.health_points);
         }
 
-        //public void addGuns(Weapon weapon)
-        //{
-        //    playerGuns.Add(weapon);
-        //    defaultGun = weapon;
-        //}
+        public void addGuns(Weapon weapon)
+        {
+            Weapons.Add(weapon);
+            Weapon = weapon;
+        }
 
-        //public List<Weapon> getPlayerGuns()
-        //{
-        //    return playerGuns;
-        //}
-        
+        public List<Weapon> getPlayerGuns()
+        {
+            return Weapons;
+        }
+
     }
 }

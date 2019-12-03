@@ -48,7 +48,8 @@ namespace GameServer.Controllers
         [HttpGet]
         public ActionResult<ICollection<Player>> GetAll()
         {
-            return _context.Players.Include(player => player.Weapon).ToList();
+            return _context.Players.Include(player => player.Weapon)
+                                   .Include(player => player.Weapons).ToList();
         }
 
         // GET api/player/5
