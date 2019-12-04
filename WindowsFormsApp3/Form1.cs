@@ -44,7 +44,7 @@ namespace WindowsFormsApp1
 
         private Player CurrentPlayer;
 
-        private bool P1Connected,P2Connected = false;
+        private bool P1Connected, P2Connected = false;
 
         private List<Obsticale> obsticaless = new List<Obsticale>();
         private Obsticale obs;
@@ -59,7 +59,9 @@ namespace WindowsFormsApp1
         private bool playerHit = false;
         private CHP observer = new CHP();
 
-        public Form1(  )
+        private List<PictureBox> testObstacles = new List<PictureBox>();
+
+        public Form1()
         {
             this.KeyPreview = true;
 
@@ -81,7 +83,7 @@ namespace WindowsFormsApp1
             return players;
         }
 
-        async Task<Player> GetPlayerAsync(string path,int id)
+        async Task<Player> GetPlayerAsync(string path, int id)
         {
             Player players = null;
             HttpResponseMessage response = await client.GetAsync(path + "api/player/" + id);
@@ -137,7 +139,7 @@ namespace WindowsFormsApp1
         async Task<Uri> UpdatePlayerAsync(Player player)
         {
             var s = new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PutAsync(path +"api/player/"+player.id, new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await client.PutAsync(path + "api/player/" + player.id, new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
             // Deserialize the updated product from the response body.
@@ -149,14 +151,14 @@ namespace WindowsFormsApp1
         }
         private async void Connect()
         {
-            if(Players.Count == 0)
+            if (Players.Count == 0)
             {
                 Player p = PlayerFactory.GetPlayer();
                 p.PosX = 20;
                 p.PosY = 50;
                 p.speed = 10;
                 var url = await CreatePlayerAsync(p);
-                CurrentPlayer = await GetPlayerAsync(path,1);
+                CurrentPlayer = await GetPlayerAsync(path, 1);
                 textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
             }
@@ -172,9 +174,9 @@ namespace WindowsFormsApp1
                 P2Connected = true;
             }
 
-            
+
             // Deserialize the updated product from the response body.
-            
+
 
             // return URI of the created resource.
         }
@@ -272,8 +274,8 @@ namespace WindowsFormsApp1
                     //        P1.Move(10.00f);
                     //        e.Handled = true;
                     //        break;
-             }
             }
+        }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
@@ -284,14 +286,20 @@ namespace WindowsFormsApp1
             //pagal nustatymus zaidimo laukas
             e.Graphics.FillRectangle(Brushes.Black, 0, 0, 330, 330);
             e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
-            if(P1 != null)
+            if (P1 != null)
             {
                 e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 10, 10);
             }
-            if(P2 != null)
+            if (P2 != null)
             {
                 e.Graphics.FillRectangle(Brushes.Red, P2.PosX, P2.PosY, 10, 10);
             }
+
+            //kliutys
+            GenerateObstacle();
+            //var obstacleBox = new Rectangle(100, 100, 100, 100);
+
+
             ////zaidejo objektas
             //if (createPlayer)
             //{
@@ -408,10 +416,10 @@ namespace WindowsFormsApp1
             //pagal nustatymus padaryti zaidimo lauka
             if (P1Connected)
             {
-               var Random2 = PlayerMovement(P1);
-               await UpdatePlayerAsync(Random2);
+                var Random2 = PlayerMovement(P1);
+                await UpdatePlayerAsync(Random2);
             }
-            if(P2Connected)
+            if (P2Connected)
             {
                 var Random = PlayerMovement(P2);
                 await UpdatePlayerAsync(Random);
@@ -429,20 +437,36 @@ namespace WindowsFormsApp1
                 switch (_playerDirection)
                 {
                     case Direction.Right:
-                        RightCommand right = new RightCommand(CurrentPlayer);
-                        right.Execute();
+                        if (!CollisionDetection(CurrentPlayer, Direction.Right))
+                        {
+                            RightCommand right = new RightCommand(CurrentPlayer);
+                            right.Execute();
+                            break;
+                        }
                         break;
                     case Direction.Left:
-                        LeftCommand left = new LeftCommand(CurrentPlayer);
-                        left.Execute();
+                        if (!CollisionDetection(CurrentPlayer, Direction.Left))
+                        {
+                            LeftCommand left = new LeftCommand(CurrentPlayer);
+                            left.Execute();
+                            break;
+                        }
                         break;
                     case Direction.Up:
-                        UpCommand up = new UpCommand(CurrentPlayer);
-                        up.Execute();
+                        if (!CollisionDetection(CurrentPlayer, Direction.Up))
+                        {
+                            UpCommand up = new UpCommand(CurrentPlayer);
+                            up.Execute();
+                            break;
+                        }
                         break;
                     case Direction.Down:
-                        DownCommand down = new DownCommand(CurrentPlayer);
-                        down.Execute();
+                        if (!CollisionDetection(CurrentPlayer, Direction.Down))
+                        {
+                            DownCommand down = new DownCommand(CurrentPlayer);
+                            down.Execute();
+                            break;
+                        }
                         break;
                     case Direction.Stop:
                         CurrentPlayer.PosX += 0;
@@ -452,6 +476,56 @@ namespace WindowsFormsApp1
                 }
             }
             return CurrentPlayer;
+        }
+
+        private bool CollisionDetection(Player player, Direction direction)
+        {
+            bool hits = false;
+            foreach (PictureBox pb in testObstacles)
+            {
+                var pictureRect = new Rectangle(
+                    pb.Location.X,
+                    pb.Location.Y,
+                    pb.Width,
+                    pb.Height
+                );
+
+
+                switch (direction)
+                {
+                    case Direction.Right:
+                        hits = pictureRect.Contains(Convert.ToInt32(player.PosX) + board.step, Convert.ToInt32(player.PosY));
+                        break;
+                    case Direction.Left:
+                        hits = pictureRect.Contains(Convert.ToInt32(player.PosX) - board.step, Convert.ToInt32(player.PosY));
+                        break;
+                    case Direction.Up:
+                        hits = pictureRect.Contains(Convert.ToInt32(player.PosX), Convert.ToInt32(player.PosY) - board.step);
+                        break;
+                    case Direction.Down:
+                        hits = pictureRect.Contains(Convert.ToInt32(player.PosX), Convert.ToInt32(player.PosY) + board.step);
+                        break;
+                }
+                if (hits)
+                {
+                    return hits;
+                }
+            }            
+            return hits;
+        }
+
+        private void GenerateObstacle()
+        {
+            var obstacleBox = new PictureBox
+            {
+                Name = "obstacleBox",
+                Size = new Size(100, 100),
+                Location = new Point(150, 150),
+                Image = Image.FromFile("Image/player.png"),
+                SizeMode = PictureBoxSizeMode.StretchImage
+        };
+            testObstacles.Add(obstacleBox);
+            this.Controls.Add(obstacleBox);
         }
     }
 }

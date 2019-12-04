@@ -9,6 +9,10 @@ namespace GameServer.Models.Decorator
     {
         private Ginklas ginklai;
 
+        private int gameboardX = 320;
+        private int gameboardY = 320;
+        public int step = 10;
+
         public Ginklas getGinklai()
         {
             return ginklai;
