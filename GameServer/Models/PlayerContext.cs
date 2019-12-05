@@ -15,8 +15,8 @@ namespace GameServer.Models
             get;
             set;  
         }
-     
-       
+
+        public DbSet<Bullet> Bullet { get; set; }
         public PlayerContext(DbContextOptions<PlayerContext> options)
             : base(options)
         {
