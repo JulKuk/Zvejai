@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using GameServer.Models;
 namespace GameServer.Models
 {
     public class PlayerContext : DbContext
@@ -14,13 +15,16 @@ namespace GameServer.Models
             get;
             set;  
         }
-     
-       
+
+        public DbSet<Bullet> Bullet { get; set; }
         public PlayerContext(DbContextOptions<PlayerContext> options)
             : base(options)
         {
             
         }
+     
+       
+        
 
     }
 }
