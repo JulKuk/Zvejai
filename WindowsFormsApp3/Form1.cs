@@ -547,7 +547,7 @@ namespace WindowsFormsApp1
 				Name = "obstacleBox",
 				Size = new Size(100, 100),
 				Location = new Point(150, 150),
-				Image = Image.FromFile("Image/player.png"),
+				Image = Image.FromFile("Image/obstacleBlue.png"),
 				SizeMode = PictureBoxSizeMode.StretchImage
 		};
 			testObstacles.Add(obstacleBox);
