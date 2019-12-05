@@ -47,7 +47,6 @@ namespace WindowsFormsApp1
 
 		private bool P1Connected, P2Connected = false;
 		private bool shoot,shooting = false;
-		private bool shoot,shooting = false;
 
 		private List<Obsticale> obsticaless = new List<Obsticale>();
 		private Obsticale obs;
@@ -284,7 +283,7 @@ namespace WindowsFormsApp1
 					//        e.Handled = true;
 					//        break;
 			}
-            }
+         }
 
 		private void Form1_KeyUp(object sender, KeyEventArgs e)
 		{
