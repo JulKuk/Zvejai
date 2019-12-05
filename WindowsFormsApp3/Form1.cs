@@ -278,7 +278,7 @@ namespace WindowsFormsApp1
 			obsticalescreate = true;
 		}
 
-		private void Form1_KeyDown(object sender, KeyEventArgs e)
+		private async void Form1_KeyDown(object sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
