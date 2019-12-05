@@ -36,6 +36,11 @@ namespace WindowsFormsApp1
 			Left, Right, Up, Down, Stop
 		}
 
+        enum Colour
+        { 
+            Red, Blue, Green
+        }
+
 		private Direction _playerDirection;
 		private Direction _shotDirection;
 		MoveAlgorithm moveAlgorithm = new MoveAlgorithm();
@@ -221,16 +226,24 @@ namespace WindowsFormsApp1
 
 		private void ObsticalesBraizymas()
 		{
+            Random rnd = new Random();
+            Array colours = Enum.GetValues(typeof(Colour));
+
 			int[] xai = new int[6];
 			int[] yai = new int[6];
-			using (TextReader reader = File.OpenText("C:/Users/Admin/source/repos/Zvejai/WindowsFormsApp3/obsord.txt"))
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					xai[i] = int.Parse(reader.ReadLine());
-					yai[i] = int.Parse(reader.ReadLine());
-				}
-			}
+
+            //kazkaip kitaip reikia nurodyt i to failo vieta
+            string path = Path.GetFullPath("WindowsFormsApp3.exe").ToString();
+            string path2 = Path.GetFullPath(Path.Combine(path, @"..\..\..\..\"));
+            string path3 = Path.GetFullPath(Path.Combine(path2, @"obsord.txt"));
+            using (TextReader reader = File.OpenText(path3))
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    xai[i] = int.Parse(reader.ReadLine());
+                    yai[i] = int.Parse(reader.ReadLine());
+                }
+            }
 			List<Obsticale> visos = new List<Obsticale>();
 			visos.Add(obsB);
 			visos.Add(obsG);
@@ -242,6 +255,8 @@ namespace WindowsFormsApp1
 				obsatskiras.PosX = xai[i];
 				obsatskiras.PosY = yai[i];
 				obsticaless.Add(obsatskiras);
+
+                GenerateObstacle(Convert.ToInt32(obsatskiras.PosX), Convert.ToInt32(obsatskiras.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
 				//var url = await CreateObstacleAsync(obsatskiras);
 			}
 			obsticalescreate = true;
@@ -357,7 +372,7 @@ namespace WindowsFormsApp1
 		{
 			//pagal nustatymus zaidimo laukas
 			e.Graphics.FillRectangle(Brushes.Black, 0, 0, 330, 330);
-			e.Graphics.FillRectangle(Brushes.White, 5, 5, 320, 320);
+			e.Graphics.FillRectangle(Brushes.White, 10, 10, 310, 310);
 			if (P1 != null)
 			{
 				e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 10, 10);
@@ -379,13 +394,13 @@ namespace WindowsFormsApp1
                 x += 10;
                 e.Graphics.FillRectangle(Brushes.Black, x, y, 5, 5);
             }
-			if (obsticalescreate)
-			{
-				for (int i = 0; i < 6; i++)
-				{
-					e.Graphics.FillRectangle(Brushes.Red, obsticaless[i].PosX, obsticaless[i].PosY, 10, 10);
-				}
-			}
+			//if (obsticalescreate)
+			//{
+			//	for (int i = 0; i < 6; i++)
+			//	{
+			//		e.Graphics.FillRectangle(Brushes.Red, obsticaless[i].PosX, obsticaless[i].PosY, 10, 10);
+			//	}
+			//}
 			
 
             //kliutys
@@ -530,12 +545,12 @@ namespace WindowsFormsApp1
 		//note that paisyti reikia ant formos, o ne i picture
 		public Player PlayerMovement(Player CurrentPlayer)
 		{
-			if (CurrentPlayer.PosX >= 5 && CurrentPlayer.PosX <= 305 && CurrentPlayer.PosY >= 5 && CurrentPlayer.PosY <= 305)
+			if (CurrentPlayer.PosX >= 10 && CurrentPlayer.PosX <= 310 && CurrentPlayer.PosY >= 10 && CurrentPlayer.PosY <= 310)
 			{
 				switch (_playerDirection)
 				{
 					case Direction.Right:
-						if (!CollisionDetection(CurrentPlayer, Direction.Right))
+						if (!CollisionDetection(CurrentPlayer, Direction.Right) && CurrentPlayer.PosX != 310)
 						{
 							RightCommand right = new RightCommand(CurrentPlayer);
 							right.Execute();
@@ -543,7 +558,7 @@ namespace WindowsFormsApp1
 						}
 						break;
 					case Direction.Left:
-						if (!CollisionDetection(CurrentPlayer, Direction.Left))
+						if (!CollisionDetection(CurrentPlayer, Direction.Left) && CurrentPlayer.PosX != 10)
 						{
 							LeftCommand left = new LeftCommand(CurrentPlayer);
 							left.Execute();
@@ -551,7 +566,7 @@ namespace WindowsFormsApp1
 						}
 						break;
 					case Direction.Up:
-						if (!CollisionDetection(CurrentPlayer, Direction.Up))
+						if (!CollisionDetection(CurrentPlayer, Direction.Up) && CurrentPlayer.PosY != 10)
 						{
 							UpCommand up = new UpCommand(CurrentPlayer);
 							up.Execute();
@@ -559,7 +574,7 @@ namespace WindowsFormsApp1
 						}
 						break;
 					case Direction.Down:
-						if (!CollisionDetection(CurrentPlayer, Direction.Down))
+						if (!CollisionDetection(CurrentPlayer, Direction.Down) && CurrentPlayer.PosY != 310)
 						{
 							DownCommand down = new DownCommand(CurrentPlayer);
 							down.Execute();
@@ -612,16 +627,33 @@ namespace WindowsFormsApp1
 			return hits;
 		}
 
-		private void GenerateObstacle()
+		private void GenerateObstacle(int posX, int posY, int width, int height, Colour colour)
 		{
+            string colourFile;
+            switch (colour)
+            {
+                case Colour.Blue:
+                    colourFile = "Image/obstacleBlue.png";
+                    break;
+                case Colour.Green:
+                    colourFile = "Image/obstacleGreen.png";
+                    break;
+                case Colour.Red:
+                    colourFile = "Image/obstacleRed.png";
+                    break;
+                default:
+                    colourFile = "Image/obstacleRed.png";
+                    break;
+            }
+
 			var obstacleBox = new PictureBox
 			{
 				Name = "obstacleBox",
-				Size = new Size(100, 100),
-				Location = new Point(150, 150),
-				Image = Image.FromFile("Image/obstacleBlue.png"),
+				Size = new Size(width, height),
+				Location = new Point(posX, posY),
+				Image = Image.FromFile(colourFile),
 				SizeMode = PictureBoxSizeMode.StretchImage
-		};
+		    };
 			//obsticaless.Add(obsR);
 			this.Controls.Add(obstacleBox);
 		}
