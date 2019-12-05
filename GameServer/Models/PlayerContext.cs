@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using GameServer.Models;
 namespace GameServer.Models
 {
     public class PlayerContext : DbContext
@@ -21,6 +22,9 @@ namespace GameServer.Models
         {
             
         }
+     
+       
+        public DbSet<Obsticale> Obsticale { get; set; }
 
     }
 }

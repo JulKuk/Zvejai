@@ -16,5 +16,6 @@ namespace GameServer.Models
         {
         
         }
+        public abstract Entity Clone();
     }
 }

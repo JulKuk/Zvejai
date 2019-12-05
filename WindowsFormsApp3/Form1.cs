@@ -19,6 +19,7 @@ using GameServer.Models.Command;
 using WindowsFormsApp3;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -49,7 +50,12 @@ namespace WindowsFormsApp1
 		private bool shoot,shooting = false;
 
 		private List<Obsticale> obsticaless = new List<Obsticale>();
-		private Obsticale obs;
+		private int[] kordinates = new int[20];
+		
+		private Obsticale obsR = new ObsticaleFacotry().CreateObsticale("R");
+		private Obsticale obsB = new ObsticaleFacotry().CreateObsticale("B");
+		private Obsticale obsG = new ObsticaleFacotry().CreateObsticale("G");
+		private Obsticale obsatskiras;
 		private bool obsticalescreate = false;
 		private bool obsCr = false;
 		// List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
@@ -63,6 +69,8 @@ namespace WindowsFormsApp1
 
 		private List<PictureBox> testObstacles = new List<PictureBox>();
 
+
+
 		public Form1()
 		{
 			this.KeyPreview = true;
@@ -71,6 +79,32 @@ namespace WindowsFormsApp1
 			_playerDirection = Direction.Stop;
 
 			InitializeComponent();
+		}
+
+		async Task<ICollection<Obsticale>> GetAllObstaclesAsync(string path)
+		{
+			ICollection<Obsticale> obstacle = null;
+			HttpResponseMessage response = await client.GetAsync(path + "api/obstacles");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				obstacle = JsonConvert.DeserializeObject<ICollection<Obsticale>>(content);
+			}
+			return obstacle;
+		}
+
+		async Task<Uri> CreateObstacleAsync(Obsticale obstacle)
+		{
+			var s = new StringContent(JsonConvert.SerializeObject(obstacle), Encoding.UTF8, "application/json");
+			HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/obstacles", new StringContent(JsonConvert.SerializeObject(obstacle), Encoding.UTF8, "application/json"));
+			response.EnsureSuccessStatusCode();
+
+			// Deserialize the updated product from the response body.
+			var obstacle2 = await response.Content.ReadAsStringAsync();
+
+
+			// return URI of the created resource.
+			return response.Headers.Location;
 		}
 
 		async Task<ICollection<Player>> GetAllPlayerAsync(string path)
@@ -176,11 +210,41 @@ namespace WindowsFormsApp1
 				P2Connected = true;
 			}
 
+			ObsticalesBraizymas();
+
 
 			// Deserialize the updated product from the response body.
 
 
 			// return URI of the created resource.
+		}
+
+		private void ObsticalesBraizymas()
+		{
+			int[] xai = new int[6];
+			int[] yai = new int[6];
+			using (TextReader reader = File.OpenText("C:/Users/Admin/source/repos/Zvejai/WindowsFormsApp3/obsord.txt"))
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					xai[i] = int.Parse(reader.ReadLine());
+					yai[i] = int.Parse(reader.ReadLine());
+				}
+			}
+			List<Obsticale> visos = new List<Obsticale>();
+			visos.Add(obsB);
+			visos.Add(obsG);
+			visos.Add(obsR);
+
+			for (int i = 0; i < 6; i++)
+			{
+				obsatskiras = (Obsticale)obsR.Clone();
+				obsatskiras.PosX = xai[i];
+				obsatskiras.PosY = yai[i];
+				obsticaless.Add(obsatskiras);
+				//var url = await CreateObstacleAsync(obsatskiras);
+			}
+			obsticalescreate = true;
 		}
 
 		private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -315,9 +379,17 @@ namespace WindowsFormsApp1
                 x += 10;
                 e.Graphics.FillRectangle(Brushes.Black, x, y, 5, 5);
             }
+			if (obsticalescreate)
+			{
+				for (int i = 0; i < 6; i++)
+				{
+					e.Graphics.FillRectangle(Brushes.Red, obsticaless[i].PosX, obsticaless[i].PosY, 10, 10);
+				}
+			}
+			
 
             //kliutys
-            GenerateObstacle();
+            //GenerateObstacle();
             //var obstacleBox = new Rectangle(100, 100, 100, 100);
 
 
@@ -550,7 +622,7 @@ namespace WindowsFormsApp1
 				Image = Image.FromFile("Image/obstacleBlue.png"),
 				SizeMode = PictureBoxSizeMode.StretchImage
 		};
-			testObstacles.Add(obstacleBox);
+			//obsticaless.Add(obsR);
 			this.Controls.Add(obstacleBox);
 		}
 	}
