@@ -654,7 +654,8 @@ namespace WindowsFormsApp1
 				Image = Image.FromFile(colourFile),
 				SizeMode = PictureBoxSizeMode.StretchImage
 		    };
-			//obsticaless.Add(obsR);
+            //obsticaless.Add(obsR);
+            testObstacles.Add(obstacleBox);
 			this.Controls.Add(obstacleBox);
 		}
 	}
