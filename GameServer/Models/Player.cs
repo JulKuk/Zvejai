@@ -67,6 +67,10 @@ namespace GameServer.Models
         {
             return Weapons;
         }
+        public override Entity Clone()
+        {
+            return this.MemberwiseClone() as Player;
+        }
 
     }
 }

@@ -24,7 +24,7 @@ namespace GameServer.Models
         }
      
        
-        
+        public DbSet<Obsticale> Obsticale { get; set; }
 
     }
 }

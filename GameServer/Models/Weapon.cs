@@ -17,5 +17,10 @@ namespace GameServer.Models
         {
            return "Im Weapon Entity";
         }
+
+        public override Entity Clone()
+        {
+            return this.MemberwiseClone() as Weapon;
+        }
     }
 }
