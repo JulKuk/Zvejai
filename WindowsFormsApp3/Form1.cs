@@ -30,6 +30,10 @@ namespace WindowsFormsApp1
 		private PlayerFactory PlayerFactory = new PlayerFactory();
 		//Http Klientas jsonui siusti
 		public HttpClient client = new HttpClient();
+        //Bullets for shooting
+        public List<Bullet> bulletsP1 = new List<Bullet>();
+        public List<Bullet> bulletsP2 = new List<Bullet>();
+        public int spacePressed = 0;
 		enum Direction
 		{
 			Left, Right, Up, Down, Stop
@@ -47,6 +51,7 @@ namespace WindowsFormsApp1
 
 		private bool P1Connected, P2Connected = false;
 		private bool shoot,shooting = false;
+        
 
 		private List<Obsticale> obsticaless = new List<Obsticale>();
 		private Obsticale obs;
@@ -85,7 +90,7 @@ namespace WindowsFormsApp1
 			return players;
 		}
 
-		async Task<Player> GetPlayerAsync(string path, int id)
+		async Task<Player> GetPlayerAsync(string path, long id)
 		{
 			Player players = null;
 			HttpResponseMessage response = await client.GetAsync(path + "api/player/" + id);
@@ -153,6 +158,7 @@ namespace WindowsFormsApp1
 		}
 		private async void Connect()
 		{
+            spacePressed = 0;
 			if (Players.Count == 0)
 			{
 				Player p = PlayerFactory.GetPlayer();
@@ -162,8 +168,13 @@ namespace WindowsFormsApp1
 				var url = await CreatePlayerAsync(p);
 				CurrentPlayer = await GetPlayerAsync(path, 1);
 				textBox1.AppendText("Player 1 Connected.");
-				P1Connected = true;
-			}
+                P1Connected = true;
+                for (int i = 0; i < CurrentPlayer.Weapon.ammo; i++)
+                {
+                    Bullet temp = new Bullet { bulletID = i, posX = CurrentPlayer.PosX, posY = CurrentPlayer.PosY, speed = 10 };
+                    bulletsP1.Add(temp);
+                }
+            }
 			else if (Players.Count == 1)
 			{
 				Player p = PlayerFactory.GetPlayer();
@@ -174,6 +185,11 @@ namespace WindowsFormsApp1
 				CurrentPlayer = await GetPlayerAsync(path, 2);
 				textBox1.AppendText("Player 2 Connected.");
 				P2Connected = true;
+                for (int i = 0; i < CurrentPlayer.Weapon.ammo; i++)
+                {
+                    Bullet temp = new Bullet{ bulletID = i, posX = CurrentPlayer.PosX, posY = CurrentPlayer.PosY, speed = 10 };
+                    bulletsP2.Add(temp);
+                }
 			}
 
 
@@ -183,7 +199,7 @@ namespace WindowsFormsApp1
 			// return URI of the created resource.
 		}
 
-		private void Form1_KeyDown(object sender, KeyEventArgs e)
+		private async void Form1_KeyDown(object sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode)
 			{
@@ -217,77 +233,91 @@ namespace WindowsFormsApp1
 					e.Handled = true;
 					break;
 				case Keys.Space:
-					x = P1.PosX;
-					y = P1.PosY;
-					shoot = true;
-					e.Handled = true;
+                    CurrentPlayer = await GetPlayerAsync(path, CurrentPlayer.id);
+                    if(CurrentPlayer.Weapon.ammo  > spacePressed)
+                    {
+                        shoot = true;
+                        bulletsP1[spacePressed].posX = CurrentPlayer.PosX;
+                        bulletsP1[spacePressed].posY = CurrentPlayer.PosY;
+                        bulletsP1[spacePressed].visible = true;
+                        spacePressed++;
+                        e.Handled = true;
+                    }else
+                    {
+                        textBox1.AppendText("OutOfAmmo"+ Environment.NewLine);
+                        e.Handled = true;
+                    }
 					break;
-					//    case Keys.C:
-					//        createPlayer = true;
-					//        Ginklas ginklas = new Granata(P1);
-					//        textBox1.AppendText("Creating player:" + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.D1:
-					//        ginklas = new Granata(P1);
-					//        board.setGinklai(ginklas);
-					//        textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.D2:
-					//        ginklas = new Pistoletas(P1);
-					//        board.setGinklai(ginklas);
-					//        textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.D3:
-					//        ginklas = new Automatas(P1);
-					//        board.setGinklai(ginklas);
-					//        textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.D4:
-					//        ginklas = new Snaiperis(P1);
-					//        board.setGinklai(ginklas);
-					//        textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.D5:
-					//        ginklas = new Bazuka(P1);
-					//        board.setGinklai(ginklas);
-					//        textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.M:
-					//        P1.UpdateHealth(-1);
-					//        playerHit = true;
-					//        textBox1.AppendText("Player got hit." + Environment.NewLine);
-					//        observer.CheckHealth = P1;
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.P:
-					//        textBox1.AppendText("Player opened shop." + Environment.NewLine);
-					//        shop.Open(P1);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.F1:
-					//        textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
-					//        P1.setStrategy(moveAlgorithm);
-					//        P1.Move(5.00f);
-					//        e.Handled = true;
-					//        break;
-					//    case Keys.F2:
-					//        textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
-					//        P1.setStrategy(moveAlgorithm);
-					//        P1.Move(10.00f);
-					//        e.Handled = true;
-					//        break;
-			}
+                case Keys.R:
+                    spacePressed = 0;
+                    break;
+                    //    case Keys.D1:
+                    //        ginklas = new Granata(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D2:
+                    //        ginklas = new Pistoletas(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D3:
+                    //        ginklas = new Automatas(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D4:
+                    //        ginklas = new Snaiperis(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.D5:
+                    //        ginklas = new Bazuka(P1);
+                    //        board.setGinklai(ginklas);
+                    //        textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.M:
+                    //        P1.UpdateHealth(-1);
+                    //        playerHit = true;
+                    //        textBox1.AppendText("Player got hit." + Environment.NewLine);
+                    //        observer.CheckHealth = P1;
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.P:
+                    //        textBox1.AppendText("Player opened shop." + Environment.NewLine);
+                    //        shop.Open(P1);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.F1:
+                    //        textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
+                    //        P1.setStrategy(moveAlgorithm);
+                    //        P1.Move(5.00f);
+                    //        e.Handled = true;
+                    //        break;
+                    //    case Keys.F2:
+                    //        textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
+                    //        P1.setStrategy(moveAlgorithm);
+                    //        P1.Move(10.00f);
+                    //        e.Handled = true;
+                    //        break;
+            }
          }
 
 		private void Form1_KeyUp(object sender, KeyEventArgs e)
 		{
 			_playerDirection = Direction.Stop;
+            if (spacePressed <= CurrentPlayer.Weapon.ammo)
+            {
+                if (e.KeyCode == Keys.Space)
+                {
+                    spacePressed--;
+                }
+            }
 		}
 		private void Form1_Paint(object sender, PaintEventArgs e)
 		{
@@ -297,24 +327,34 @@ namespace WindowsFormsApp1
 			if (P1 != null)
 			{
 				e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 10, 10);
-			}
+                if (spacePressed != P1.Weapon.ammo)
+                {
+                    if (bulletsP1[spacePressed].visible)
+                    {
+                        for (int i = 0; i < bulletsP1.Count; i++)
+                        {
+                            if (bulletsP1[i].visible)
+                            {
+                                if (bulletsP1[i].posX < 325)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.Black, bulletsP1[i].posX, bulletsP1[i].posY, 5, 5);
+                                }
+                                else
+                                {
+                                    bulletsP1[i].visible = false;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
 			if (P2 != null)
 			{
 				e.Graphics.FillRectangle(Brushes.Red, P2.PosX, P2.PosY, 10, 10);
 			}
-           
-            if(shoot)
-            {
-                e.Graphics.FillRectangle(Brushes.Black, x, y, 5, 5);
-                shoot = false;
-                shooting = true;
-            }
 
-            if(shooting)
-            {
-                x += 10;
-                e.Graphics.FillRectangle(Brushes.Black, x, y, 5, 5);
-            }
+            
 
             //kliutys
             GenerateObstacle();
@@ -441,16 +481,20 @@ namespace WindowsFormsApp1
 			if (P1Connected)
 			{
 				var Random2 = PlayerMovement(P1);
-				await UpdatePlayerAsync(Random2);
-			}
+                await UpdatePlayerAsync(Random2);
+            }
 			if (P2Connected)
 			{
 				var Random = PlayerMovement(P2);
 				await UpdatePlayerAsync(Random);
 			}
-			if (shooting)
+			if (shoot)
 			{
-				x += 10;
+                for (int i = 0; i < bulletsP1.Count; i++)
+                {
+                    bulletsP1[i].posX += 10;
+                }
+                    
 			}
 			Invalidate();
 		}
@@ -551,7 +595,7 @@ namespace WindowsFormsApp1
 				SizeMode = PictureBoxSizeMode.StretchImage
 		};
 			testObstacles.Add(obstacleBox);
-			this.Controls.Add(obstacleBox);
+			Controls.Add(obstacleBox);
 		}
 	}
 }

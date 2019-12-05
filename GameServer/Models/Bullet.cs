@@ -15,6 +15,8 @@ namespace GameServer.Models
 
         public float speed { get; set; }
 
+        public bool visible { get; set; }
+
 
     }
 }
