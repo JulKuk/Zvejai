@@ -17,13 +17,13 @@ namespace GameServer.Models.Command
         public void Execute()
         {
             long nextCoord = player.PosY + Convert.ToInt64(player.speed);
-            if (nextCoord <= 305)
+            if (nextCoord <= 310)
             {
                 player.PosY += Convert.ToInt64(player.speed);
             }
             else
             {
-                long diff = 305 - player.PosY;
+                long diff = 310 - player.PosY;
                 undo(diff);
             }
         }
