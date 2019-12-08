@@ -47,7 +47,7 @@ namespace GameServer
                                     {
                                         bullet.visible = false;
                                         PlayerToHit.reduceHealth(CurrectPlayer.Weapon.damage);
-                                        CurrectPlayer.points += 100; 
+                                        CurrectPlayer.points += 100;
                                         db.Players.Update(PlayerToHit);
                                         db.Players.Update(CurrectPlayer);
                                         db.Bullet.Update(bullet);
@@ -67,7 +67,37 @@ namespace GameServer
                                     db.Bullet.Update(bullet);
                                     db.SaveChanges();
                                 }
+                            }
+                            else
+                            {
+                                Player PlayerToHit = Players[0];
+                                Player CurrectPlayer = Players[1];
+                                if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 310)
+                                {
+                                    if (PlayerToHit != null && PlayerToHit.PosX == bullet.posX && PlayerToHit.PosY == bullet.posY)
+                                    {
+                                        bullet.visible = false;
+                                        PlayerToHit.reduceHealth(CurrectPlayer.Weapon.damage);
+                                        CurrectPlayer.points += 100;
+                                        db.Players.Update(PlayerToHit);
+                                        db.Players.Update(CurrectPlayer);
+                                        db.Bullet.Update(bullet);
+                                        db.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        bullet.Move();
+                                        db.Bullet.Update(bullet);
+                                        db.SaveChanges();
+                                    }
 
+                                }
+                                else
+                                {
+                                    bullet.visible = false;
+                                    db.Bullet.Update(bullet);
+                                    db.SaveChanges();
+                                }
                             }
                         }
                     }
