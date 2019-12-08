@@ -15,7 +15,7 @@ namespace GameServer.Models.AbstractFactory
 
         public override Player CreatePlayer()
         {
-            //return new Player { Name = "Julius", health_points = 100, PosX = 20, PosY = 50, };
+            //return new Player { Name = player.Name, health_points = player.health_points, PosX = player.PosX, PosY = player.PosY, points = player.points, algorithm = player.algorithm };
             return null;
         }
 

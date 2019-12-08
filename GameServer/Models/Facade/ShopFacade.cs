@@ -9,7 +9,7 @@ namespace GameServer.Models.Facade
     {
         //cia susideti tuos testus kur destytojui rodem
 
-        ShopManager shopManager = new ShopManager();
+        public ShopManager shopManager = new ShopManager();
 
         Item bazuka = new Item("Bazuka", new Bazooka());
         Item automat = new Item("Automatas", new Automat());
@@ -47,6 +47,15 @@ namespace GameServer.Models.Facade
         public void setPlayerGold(Player p)
         {
             this.playerInventory = new PlayerInventory(p.points);
+        }
+
+        public bool CanBuyItem(Player player, string gunType)
+        {
+            if (player.points > 100)
+            {
+                return true;
+            }
+            else return false;
         }
     }
 

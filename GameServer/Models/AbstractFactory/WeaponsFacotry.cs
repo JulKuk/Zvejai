@@ -34,7 +34,7 @@ namespace GameServer.Models.AbstractFactory
             }
             if (GunType.Equals("B"))
             {
-                return new Bazooka { ammo = 1, cost = 1000, damage = 100, name = " RukyBazuky" };
+                return new Bazooka { ammo = 1, cost = 1000, damage = 100, name = "RukyBazuky" };
             }
 
             return new Granade { ammo = 1, name = "small", damage = 10, cost = 0 };

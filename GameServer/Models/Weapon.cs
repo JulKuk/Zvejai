@@ -13,6 +13,8 @@ namespace GameServer.Models
         public int damage { get; set; }
         public int ammo { get; set; }
 
+        public int _kiekKulkuYra { get; set; }
+
         public override string SayHello()
         {
            return "Im Weapon Entity";
@@ -22,5 +24,11 @@ namespace GameServer.Models
         {
             return this.MemberwiseClone() as Weapon;
         }
+
+        public void Reload()
+        {
+            _kiekKulkuYra = ammo;
+        }
+
     }
 }

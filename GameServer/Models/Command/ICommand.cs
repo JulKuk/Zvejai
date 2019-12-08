@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models.Command
 {
-    interface ICommand
+    public interface ICommand
     {
         void Execute();
 

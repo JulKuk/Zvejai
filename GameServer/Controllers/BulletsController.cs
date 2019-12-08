@@ -93,7 +93,7 @@ namespace GameServer.Controllers
             _context.Bullet.Add(bullet);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBullet", new { id = bullet.bulletID }, bullet);
+            return Ok();
         }
 
         // DELETE: api/Bullets/5

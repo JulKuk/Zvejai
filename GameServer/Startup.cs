@@ -46,6 +46,7 @@ namespace GameServer
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            Game.ServiceProvider = app.ApplicationServices;
         }
     }
 }

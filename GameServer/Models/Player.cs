@@ -71,6 +71,25 @@ namespace GameServer.Models
         {
             return this.MemberwiseClone() as Player;
         }
+        public void reduceHealth(int health)
+        {
+            health_points -= health;
+        }
+
+        public Bullet Shoot()
+        {
+            if (Weapon._kiekKulkuYra > 0)
+            {
+                Weapon._kiekKulkuYra -= 1;
+                return new Bullet { PlayerID = id, posX = PosX,posY = PosY, speed = 10, visible = true };
+            }
+
+            return null;
+        }
+        public void reloadWeapon()
+        {
+            Weapon._kiekKulkuYra = Weapon.ammo;
+        }
 
     }
 }

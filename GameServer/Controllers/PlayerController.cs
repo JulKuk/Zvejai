@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using GameServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using GameServer.Models.AbstractFactory;
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GameServer.Controllers
@@ -14,7 +15,9 @@ namespace GameServer.Controllers
     [ApiController]
     public class PlayerController : ControllerBase
     {
+
         private readonly PlayerContext _context;
+        private PlayerFactory factory = new PlayerFactory();
         public int Qty { get; set; } = 0;
 
         // GET: /<controller>/
@@ -31,10 +34,9 @@ namespace GameServer.Controllers
             //{
             //    // Create a new Player if collection is empty,
             //    // which means you can't delete all Players.
-            //    for (int i = 0; i < 4; i++)
+            //    for (int i = 0; i < 1; i++)
             //    {
-            //        Qty++;
-            //        Player p = new Player { Name = "Player-" + Qty, health_points = 100, PosX = 0, PosY = 0 };
+            //        Player p = factory.GetPlayer();
             //        _context.Players.Add(p);
             //    }
 
@@ -72,6 +74,11 @@ namespace GameServer.Controllers
             _context.Weapons.Add(player.Weapon);
             _context.SaveChanges();
 
+            if (!Game.IsStarted())
+            {
+                Game.StartGame();
+            }
+
             //return Ok(); //"created - ok"; 
             return player;
         }
@@ -93,6 +100,10 @@ namespace GameServer.Controllers
             pp.PosX = p.PosX;
             pp.PosY = p.PosY;
             pp.speed = p.speed;
+            pp.Weapon._kiekKulkuYra = p.Weapon._kiekKulkuYra;
+            pp.Weapon.PlayerID = p.Weapon.PlayerID;
+            pp.Weapon.damage = p.Weapon.damage;
+            pp.Weapon.cost = p.Weapon.cost;
 
             _context.Players.Update(pp);
             _context.SaveChanges();
