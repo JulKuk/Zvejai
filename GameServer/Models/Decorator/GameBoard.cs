@@ -9,8 +9,12 @@ namespace GameServer.Models.Decorator
     {
         private Ginklas ginklai;
 
+#pragma warning disable CS0414 // The field 'Gameboard.gameboardX' is assigned but its value is never used
         private int gameboardX = 320;
+#pragma warning restore CS0414 // The field 'Gameboard.gameboardX' is assigned but its value is never used
+#pragma warning disable CS0414 // The field 'Gameboard.gameboardY' is assigned but its value is never used
         private int gameboardY = 320;
+#pragma warning restore CS0414 // The field 'Gameboard.gameboardY' is assigned but its value is never used
         public int step = 10;
 
         public Ginklas getGinklai()

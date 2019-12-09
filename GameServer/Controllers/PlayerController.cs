@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GameServer.Models;
 using Microsoft.EntityFrameworkCore;
+#pragma warning disable CS0105 // The using directive for 'System.Linq' appeared previously in this namespace
 using System.Linq;
+#pragma warning restore CS0105 // The using directive for 'System.Linq' appeared previously in this namespace
 using GameServer.Models.AbstractFactory;
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
