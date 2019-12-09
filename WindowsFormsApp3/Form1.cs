@@ -25,12 +25,13 @@ namespace WindowsFormsApp1
 {
 	public partial class Form1 : Form
 	{
-		//WeBAPI
-		public string path = "https://localhost:44371/";
+		
 		//FaCtory
 		private PlayerFactory PlayerFactory = new PlayerFactory();
-		//Http Klientas jsonui siusti
-		public HttpClient client = new HttpClient();
+        //Http Klientas jsonui siusti
+
+        //Fascade naudojimas serveriukui
+        private GameFacade GameFacade = new GameFacade();
 		enum Direction
 		{
 			Left, Right, Up, Down, Stop
@@ -64,7 +65,6 @@ namespace WindowsFormsApp1
 		private Obsticale obsG = new ObsticaleFacotry().CreateObsticale("G");
 		private Obsticale obsatskiras;
 		// List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
-        private bool obsticalescreate =false;
 
         private ShopFacade shop = new ShopFacade();
 
@@ -87,73 +87,13 @@ namespace WindowsFormsApp1
 			InitializeComponent();
 		}
 
-		async Task<ICollection<Obsticale>> GetAllObstaclesAsync(string path)
-		{
-			ICollection<Obsticale> obstacle = null;
-			HttpResponseMessage response = await client.GetAsync(path + "api/obstacles");
-			if (response.IsSuccessStatusCode)
-			{
-				var content = await response.Content.ReadAsStringAsync();
-				obstacle = JsonConvert.DeserializeObject<ICollection<Obsticale>>(content);
-			}
-			return obstacle;
-		}
-
-		async Task<Uri> CreateObstacleAsync(Obsticale obstacle)
-		{
-			var s = new StringContent(JsonConvert.SerializeObject(obstacle), Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/obstacles", new StringContent(JsonConvert.SerializeObject(obstacle), Encoding.UTF8, "application/json"));
-			response.EnsureSuccessStatusCode();
-
-			// Deserialize the updated product from the response body.
-			var obstacle2 = await response.Content.ReadAsStringAsync();
-
-
-			// return URI of the created resource.
-			return response.Headers.Location;
-		}
-
-		async Task<ICollection<Player>> GetAllPlayerAsync(string path)
-		{
-			ICollection<Player> players = null;
-			HttpResponseMessage response = await client.GetAsync(path + "api/player");
-			if (response.IsSuccessStatusCode)
-			{
-				var content = await response.Content.ReadAsStringAsync();
-				players = JsonConvert.DeserializeObject<ICollection<Player>>(content);
-			}
-			return players;
-		}
-
-        async Task<ICollection<Bullet>> GetAllBulletsAsync(string path)
-        {
-            ICollection<Bullet> bullets = null;
-            HttpResponseMessage response = await client.GetAsync(path + "api/Bullets");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                bullets = JsonConvert.DeserializeObject<ICollection<Bullet>>(content);
-            }
-            return bullets;
-        }
-
-        async Task<Player> GetPlayerAsync(string path, long id)
-		{
-			Player players = null;
-			HttpResponseMessage response = await client.GetAsync(path + "api/player/" + id);
-			if (response.IsSuccessStatusCode)
-			{
-				var content = await response.Content.ReadAsStringAsync();
-				players = JsonConvert.DeserializeObject<Player>(content);
-			}
-			return players;
-		}
+		
 
 		private async void Form1_Load(object sender, EventArgs e)
 		{
-            Players = await GetAllPlayerAsync(path);
+            Players = await GameFacade.GetAllPlayersFromDatabase();
             Connect();
-            Players = await GetAllPlayerAsync(path);
+            Players = await GameFacade.GetAllPlayersFromDatabase();
             timer1.Tick += timer1_Tick;
             timer1.Start();
             timer1.Interval = 100;
@@ -182,59 +122,7 @@ namespace WindowsFormsApp1
 		{
 
 		}
-		async Task<Uri> CreatePlayerAsync(Player player)
-		{
-			var s = new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/player", new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
-			response.EnsureSuccessStatusCode();
-
-			// Deserialize the updated product from the response body.
-			var player2 = await response.Content.ReadAsStringAsync();
-
-
-			// return URI of the created resource.
-			return response.Headers.Location;
-		}
-        async Task<Uri> CreateBulletAsync(Bullet bullet)
-        {
-            var s = new StringContent(JsonConvert.SerializeObject(bullet), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync("https://localhost:44371/api/Bullets", new StringContent(JsonConvert.SerializeObject(bullet), Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-
-            // Deserialize the updated product from the response body.
-            var player2 = await response.Content.ReadAsStringAsync();
-
-
-            // return URI of the created resource.
-            return response.Headers.Location;
-        }
-
-        async Task<Uri> UpdatePlayerAsync(Player player)
-		{
-			var s = new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json");
-			HttpResponseMessage response = await client.PutAsync(path + "api/player/" + player.id, new StringContent(JsonConvert.SerializeObject(player), Encoding.UTF8, "application/json"));
-			response.EnsureSuccessStatusCode();
-
-			// Deserialize the updated product from the response body.
-			var player2 = await response.Content.ReadAsStringAsync();
-
-
-			// return URI of the created resource.
-			return response.Headers.Location;
-		}
-        async Task<Uri> UpdateBulletAsync(Bullet bullet)
-        {
-            var s = new StringContent(JsonConvert.SerializeObject(bullet), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PutAsync(path + "api/Bullets/" + bullet.bulletID, new StringContent(JsonConvert.SerializeObject(bullet), Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-
-            // Deserialize the updated product from the response body.
-            var player2 = await response.Content.ReadAsStringAsync();
-
-
-            // return URI of the created resource.
-            return response.Headers.Location;
-        }
+		
         private async void Connect()
 		{
             if (Players.Count == 0)
@@ -243,7 +131,7 @@ namespace WindowsFormsApp1
 				p1.PosX = 20;
 				p1.PosY = 50;
 				p1.speed = 10;
-				var url1 = await CreatePlayerAsync(p1);
+				var url1 = await GameFacade.AddPlayerToDatabase(p1);
                 _currentPlayerId = 1;
 				textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
@@ -251,10 +139,10 @@ namespace WindowsFormsApp1
             else if (Players?.Count == 1)
 			{
 				Player p = PlayerFactory.GetPlayer();
-				p.PosX = 50;
+				p.PosX = 200;
 				p.PosY = 200;
 				p.speed = 10;
-				var url = await CreatePlayerAsync(p);
+				var url = await GameFacade.AddPlayerToDatabase(p);
                 _currentPlayerId = 2;
 				textBox1.AppendText("Player 2 Connected.");
                 P2Connected = true;
@@ -305,7 +193,6 @@ namespace WindowsFormsApp1
                 GenerateObstacle(Convert.ToInt32(obsatskiras.PosX), Convert.ToInt32(obsatskiras.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
 				//var url = await CreateObstacleAsync(obsatskiras);
 			}
-			obsticalescreate = true;
 		}
 
 		private async void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -341,69 +228,15 @@ namespace WindowsFormsApp1
                         return;
                     }
                     bullet.shootingDir = GetBulletDirection();
-                    await CreateBulletAsync(bullet);
+                    await GameFacade.AddBulletToDatabase(bullet);
                     e.Handled = true;
 
 					break;
                 case Keys.R:
                     CurrentPlayer.reloadWeapon();
-                    await UpdatePlayerAsync(CurrentPlayer);
+                    await GameFacade.UpdatePlayerToDatabase(CurrentPlayer);
                     e.Handled = true;
                     break;
-                    //    case Keys.D1:
-                    //        ginklas = new Granata(P1);
-                    //        board.setGinklai(ginklas);
-                    //        textBox1.AppendText("Player switched to a grenade." + Environment.NewLine);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.D2:
-                    //        ginklas = new Pistoletas(P1);
-                    //        board.setGinklai(ginklas);
-                    //        textBox1.AppendText("Player switched to a pistol." + Environment.NewLine);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.D3:
-                    //        ginklas = new Automatas(P1);
-                    //        board.setGinklai(ginklas);
-                    //        textBox1.AppendText("Player switched to a assault rifle." + Environment.NewLine);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.D4:
-                    //        ginklas = new Snaiperis(P1);
-                    //        board.setGinklai(ginklas);
-                    //        textBox1.AppendText("Player switched to a sniper." + Environment.NewLine);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.D5:
-                    //        ginklas = new Bazuka(P1);
-                    //        board.setGinklai(ginklas);
-                    //        textBox1.AppendText("Player switched to a bazooka." + Environment.NewLine);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.M:
-                    //        P1.UpdateHealth(-1);
-                    //        playerHit = true;
-                    //        textBox1.AppendText("Player got hit." + Environment.NewLine);
-                    //        observer.CheckHealth = P1;
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.P:
-                    //        textBox1.AppendText("Player opened shop." + Environment.NewLine);
-                    //        shop.Open(P1);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.F1:
-                    //        textBox1.AppendText("Player Strategy set to Walk:" + Environment.NewLine);
-                    //        P1.setStrategy(moveAlgorithm);
-                    //        P1.Move(5.00f);
-                    //        e.Handled = true;
-                    //        break;
-                    //    case Keys.F2:
-                    //        textBox1.AppendText("Player Strategy set to Run:" + Environment.NewLine);
-                    //        P1.setStrategy(moveAlgorithm);
-                    //        P1.Move(10.00f);
-                    //        e.Handled = true;
-                    //        break;
             }
          }
 
@@ -421,8 +254,30 @@ namespace WindowsFormsApp1
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
 		{
-            _lastDirection = _playerDirection;
-			_playerDirection = Direction.Stop;
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    _lastDirection = _playerDirection;
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.S:
+                    _lastDirection = _playerDirection;
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.A:
+                    _lastDirection = _playerDirection;
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+                case Keys.D:
+                    _lastDirection = _playerDirection;
+                    _playerDirection = Direction.Stop;
+                    e.Handled = true;
+                    break;
+            }
+			
 		}
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -451,160 +306,44 @@ namespace WindowsFormsApp1
                 }
             }
 
-            //if (obsticalescreate)
-            //{
-            //	for (int i = 0; i < 6; i++)
-            //	{
-            //		e.Graphics.FillRectangle(Brushes.Red, obsticaless[i].PosX, obsticaless[i].PosY, 10, 10);
-            //	}
-            //}
-
-
-            //kliutys
-            //GenerateObstacle();
-            //var obstacleBox = new Rectangle(100, 100, 100, 100);
-
-
-            ////zaidejo objektas
-            //if (createPlayer)
-            //{
-
-            //    P1 = new PlayerFactory().GetPlayer();
-            //    P1.PosY = 10;
-
-            //    P1.PosX = 10;
-            //    //textBox1.AppendText("Player Created: " + P1.Name + " HP: " + P1.health_points + " Gun: " + P1.defaultGun.SayHello() + Environment.NewLine);
-            //    //e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
-            //    createdPlayer = true;
-            //    createPlayer = false;
-
-
-            //    //pridedamas i observeriu sarasa
-            //    observer.Attach(P1);
-            //}
-            //if (createdPlayer)
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Aqua, P1.PosX, P1.PosY, 20, 20);
-            //    e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
-            //}
-
-            ////observeriui
-            //if (playerHit)
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Red, 0, 400, 200, 50);
-            //    e.Graphics.FillRectangle(Brushes.DarkGreen, 0, 400, P1.health_points, 50);
-
-            //}
-
-            ////abstract factory obsticales
-            //if (obsticalescreate)
-            //{
-            //    List<string> ObsColors = new List<string> { "R", "G", "B" };
-            //    List<int> Obscoordinates = new List<int>();
-
-
-            //    for (int i = 10; i < 305; i = i + 1)
-            //    {
-            //        Obscoordinates.Add(i);
-            //    }
-            //    var random = new Random();
-            //    for (int i = 0; i < 60; i++)
-
-            //    {
-            //        int index = random.Next(ObsColors.Count);
-            //        obs = new ObsticaleFacotry().CreateObsticale(ObsColors[index]);
-            //        obs.PosX = random.Next(Obscoordinates.Count);
-            //        obs.PosY = random.Next(Obscoordinates.Count);
-            //        int sk = 0;
-            //        for (int j = 0; j < obsticaless.Count; j++)
-            //        {
-            //            if (obs.PosX >= (obsticaless[j].PosX -19) && obs.PosX <= (obsticaless[j].PosX + 20) && obs.PosY >= (obsticaless[j].PosY -19) && obs.PosY <= (obsticaless[j].PosY + 20))
-            //            {
-            //                sk++;
-            //            }
-            //        }
-            //        if (sk == 0)
-            //        {
-            //            obsticaless.Add(obs);
-            //        }
-
-
-
-
-            //        if (index == 0)
-            //        {
-            //            // e.Graphics.FillRectangle(Brushes.Red, obsticaless.PosX, obsticaless.PosY, 10, 10);
-            //        }
-            //        if (index == 1)
-            //        {
-            //            // e.Graphics.FillRectangle(Brushes.Green, obsticaless.PosX, obsticaless.PosY, 10, 10);
-            //        }
-            //        if (index == 2)
-            //        {
-            //            // e.Graphics.FillRectangle(Brushes.Blue, obsticaless.PosX, obsticaless.PosY, 10, 10);
-            //        }
-
-            //    }
-
-            //    obsCr = true;
-            //    obsticalescreate = false;
-            //    //obsticaless = new ObsticaleFacotry().CreateObsticale("R");
-
-            //}
-            //if (obsCr)
-            //{
-            //    foreach (Obsticale item in obsticaless)
-            //    {
-            //        if (item.Type == "Red")
-            //        {
-            //            e.Graphics.FillRectangle(Brushes.Red, item.PosX, item.PosY, 20, 20);
-            //        }
-            //        if (item.Type == "Green")
-            //        {
-            //            e.Graphics.FillRectangle(Brushes.Green, item.PosX, item.PosY, 20, 20);
-            //        }
-            //        if (item.Type == "Blue")
-            //        {
-            //            e.Graphics.FillRectangle(Brushes.Blue, item.PosX, item.PosY, 20, 20);
-            //        }
-            //    }
-            //}
-
         }
 
 		private async void timer1_Tick(object sender, EventArgs e)
 		{
-            /*	timer1.Enabled = false;
-                timer1.Interval = 100;
-                timer1.Enabled = true; */
-            P1 = await GetPlayerAsync(path, 1);
-            P2 = await GetPlayerAsync(path, 2);
-            bullets = await GetAllBulletsAsync(path);
+            P1 = await GameFacade.GetPlayerByID(1);
+            P2 = await GameFacade.GetPlayerByID(2);
+            bullets = await GameFacade.GetAllBulletsFromDatabase();
 
             if (P1Connected)
             {
                 var Random2 = PlayerMovement(P1);
-                await UpdatePlayerAsync(Random2);
+                await GameFacade.UpdatePlayerToDatabase(Random2);
 
             }
 
             if (P2Connected)
             {
                 var Random = PlayerMovement(P2);
-                await UpdatePlayerAsync(Random);
+                await GameFacade.UpdatePlayerToDatabase(Random);
             }
 
             if (P1 != null && P2 != null)
             {
                 if(P1.health_points <= 0)
                 {
-                    timer1.Enabled = false;
-                    textBox1.AppendText("P1 Lost, P2 Winner" + Environment.NewLine);
+                    P1.health_points = 100;
+                    P1.PosY = 50;
+                    P1.PosX = 20;
+                    await GameFacade.UpdatePlayerToDatabase(P1);
+                    textBox1.AppendText("P2 Killed P1 Player2 Score:" + P2.points.ToString() + Environment.NewLine);
                 }
                 if(P2.health_points <= 0)
                 {
-                    timer1.Enabled = false;
-                    textBox1.AppendText("P2 Lost, P1 Winner" + Environment.NewLine);
+                    P2.health_points = 100;
+                    P2.PosX = 200;
+                    P2.PosY = 200;
+                    await GameFacade.UpdatePlayerToDatabase(P2);
+                    textBox1.AppendText("P1 Killed P2 P1 Score:" + P1.points.ToString() + Environment.NewLine); ;
                 }
             }
             Invalidate();
@@ -726,7 +465,6 @@ namespace WindowsFormsApp1
 				Image = Image.FromFile(colourFile),
 				SizeMode = PictureBoxSizeMode.StretchImage
 		    };
-            //obsticaless.Add(obsR);
             testObstacles.Add(obstacleBox);
 			Controls.Add(obstacleBox);
 		}
