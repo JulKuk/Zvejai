@@ -11,6 +11,7 @@ namespace GameServer.Models.Facade
     public class GameFacade
     {
         private WebClient WebClient = new WebClient();
+        private Game Game = new Game();
 
         public async Task<ICollection<Player>> GetAllPlayersFromDatabase()
         {
@@ -54,6 +55,28 @@ namespace GameServer.Models.Facade
         public async Task<Player> GetPlayerByID(long id)
         {
             return await WebClient.GetPlayerAsync(id);
+        }
+
+        public Game GetGame()
+        {
+            return Game;
+        }
+
+        public async void ConnectToGame()
+        {
+            Game.Players = await this.GetAllPlayersFromDatabase();
+            if(Game.Players?.Count == 0)
+            {
+                await this.AddPlayerToDatabase(Game.CreatePlayer(1));
+                Game._currentPlayerId = 1;
+                Game.P1Connected = true;
+            }
+            else if(Game.Players?.Count == 1)
+            {
+                await this.AddPlayerToDatabase(Game.CreatePlayer(2));
+                Game._currentPlayerId = 2;
+                Game.P2Connected = true;
+            }
         }
 
 

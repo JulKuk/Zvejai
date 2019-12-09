@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
 	{
 		
 		//FaCtory
-		private PlayerFactory PlayerFactory = new PlayerFactory();
+		
         //Http Klientas jsonui siusti
 
         //Fascade naudojimas serveriukui
@@ -50,7 +50,7 @@ namespace WindowsFormsApp1
         public ICollection<Bullet> bullets;
 		public Player P1;
 		public Player P2;
-		private long x, y;
+
         private int _currentPlayerId;
         private Player CurrentPlayer => _currentPlayerId == 1 ? P1 : P2;
 
@@ -127,22 +127,16 @@ namespace WindowsFormsApp1
 		{
             if (Players.Count == 0)
             {
-                Player p1 = PlayerFactory.GetPlayer();
-				p1.PosX = 20;
-				p1.PosY = 50;
-				p1.speed = 10;
-				var url1 = await GameFacade.AddPlayerToDatabase(p1);
+                
+				var url1 = await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(1));
                 _currentPlayerId = 1;
 				textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
             }
             else if (Players?.Count == 1)
 			{
-				Player p = PlayerFactory.GetPlayer();
-				p.PosX = 200;
-				p.PosY = 200;
-				p.speed = 10;
-				var url = await GameFacade.AddPlayerToDatabase(p);
+				
+				var url = await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(2));
                 _currentPlayerId = 2;
 				textBox1.AppendText("Player 2 Connected.");
                 P2Connected = true;
