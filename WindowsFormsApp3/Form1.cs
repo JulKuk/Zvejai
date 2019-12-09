@@ -196,12 +196,11 @@ namespace WindowsFormsApp1
 		{
 			switch (e.KeyCode)
 			{
-				//case Keys.N:
-				//    textBox1.AppendText("Started new game." + Environment.NewLine);
-				//    obsticalescreate = true;
-				//    e.Handled = true;
-				//    break;
-				case Keys.W:
+                case Keys.N:
+                    textBox1.AppendText("Player State: " + CurrentPlayer.State.getState().ToString() + Environment.NewLine);
+                    e.Handled = true;
+                    break;
+                case Keys.W:
 					_playerDirection = Direction.Up;
 					e.Handled = true;
 					break;
@@ -354,6 +353,21 @@ namespace WindowsFormsApp1
                     P2.PosY = 200;
                     await GameFacade.UpdatePlayerToDatabase(P2);
                     textBox1.AppendText("P1 Killed P2 P1 Score:" + P1.points.ToString() + Environment.NewLine); ;
+                }
+                if(P2.points >= 5000 || P1.points >= 5000)
+                {
+                    if(P2.points > P1.points)
+                    {
+                        textBox1.AppendText("Player2 Wins the game with " + P2.points);
+                        textBox1.AppendText("Player1 points " + P1.points);
+                        timer1.Enabled = false;
+                    }
+                    else
+                    {
+                        textBox1.AppendText("Player1 Wins the game with " + P1.points);
+                        textBox1.AppendText("Player2 points " + P2.points);
+                        timer1.Enabled = false;
+                    }
                 }
             }
             Invalidate();

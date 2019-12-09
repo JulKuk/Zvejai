@@ -14,7 +14,7 @@ namespace GameServer.Models
         public long PosY { get; set; }
         public int health_points { get; set; }
         public int points { get; set; }
-
+        
         public List<Weapon> Weapons { get; set; } = new List<Weapon>();
 
         public Weapon Weapon { get; set; }
@@ -22,7 +22,8 @@ namespace GameServer.Models
         public float speed { get; set; }
 
         public Istrategy algorithm;
-       
+
+        public State State { get; set; } = new State();
 
         public void setStrategy(Istrategy algorithm)
         {
@@ -92,6 +93,10 @@ namespace GameServer.Models
             Weapon._kiekKulkuYra = Weapon.ammo;
         }
 
+        public void ChangeState()
+        {
+            State.goNext(this);
+        }
 
     }
 }

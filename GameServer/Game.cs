@@ -30,7 +30,7 @@ namespace GameServer
             {
                 var db = scope.ServiceProvider.GetService<PlayerContext>();
                 var bullets = db.Bullet.ToList();
-                var Players = db.Players.Include(player => player.Weapon).Include(player => player.Weapons).ToList();
+                var Players = db.Players.Include(player => player.Weapon).Include(player => player.Weapons).Include(player => player.State).ToList();
                 if (bullets != null)
                 {
                     foreach (var bullet in bullets)
