@@ -17,12 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GameServer">
-      <HintPath>..\GameServer\bin\Debug\netcoreapp2.1\GameServer.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Image\obstacleBlue.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

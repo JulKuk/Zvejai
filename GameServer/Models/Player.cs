@@ -3,6 +3,7 @@ using System;
 using GameServer.Models.Observer;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using GameServer.Models.Iterator;
 
 namespace GameServer.Models
 {
@@ -90,6 +91,7 @@ namespace GameServer.Models
         {
             Weapon._kiekKulkuYra = Weapon.ammo;
         }
+
 
     }
 }

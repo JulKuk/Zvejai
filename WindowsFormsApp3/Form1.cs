@@ -16,6 +16,7 @@ using GameServer.Models.Observer;
 using GameServer.Models.Decorator;
 using GameServer.Models.Facade;
 using GameServer.Models.Command;
+using GameServer.Models.Iterator;
 using WindowsFormsApp3;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -65,6 +66,8 @@ namespace WindowsFormsApp1
 		private Obsticale obsG = new ObsticaleFacotry().CreateObsticale("G");
 		private Obsticale obsatskiras;
 		// List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
+		
+
 
         private ShopFacade shop = new ShopFacade();
 
@@ -231,7 +234,20 @@ namespace WindowsFormsApp1
                     await GameFacade.UpdatePlayerToDatabase(CurrentPlayer);
                     e.Handled = true;
                     break;
-            }
+				case Keys.P:
+					Weapons2 wpns = new Weapons2();
+					wpns[0] = "Granade";
+					wpns[1] = "Pistol";
+					Iterator i = wpns.CreateIterator();
+					object item = i.First();
+					textBox1.AppendText("Turimi ginklai");
+					while(item != null)
+					{
+						textBox1.AppendText(" " + item);
+						item = i.Next();
+					}
+					break;
+			}
          }
 
         private Bullet.Direction GetBulletDirection()
