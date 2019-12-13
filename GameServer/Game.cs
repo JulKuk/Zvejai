@@ -45,7 +45,7 @@ namespace GameServer
                             {
                                 Player PlayerToHit = Players[1];
                                 Player CurrectPlayer = Players[0];
-                                if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 310)
+                                if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 880)
                                 {
                                     if (PlayerToHit != null && PlayerToHit.PosX <= bullet.posX + 10 && PlayerToHit.PosY <= bullet.posY +10 )
                                     {
@@ -74,9 +74,9 @@ namespace GameServer
                             {
                                 Player PlayerToHit = Players[0];
                                 Player CurrectPlayer = Players[1];
-                                if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 310)
+                                if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 880)
                                 {
-                                    if (PlayerToHit != null && PlayerToHit.PosX == bullet.posX && PlayerToHit.PosY == bullet.posY)
+                                    if (PlayerToHit != null && PlayerToHit.PosX == bullet.posX + 30 && PlayerToHit.PosY == bullet.posY + 30)
                                     {
                                         bullet.visible = false;
                                         PlayerToHit.reduceHealth(CurrectPlayer.Weapon.damage);

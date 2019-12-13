@@ -21,6 +21,7 @@ using WindowsFormsApp3;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IO;
+using GameServer.Models.Visitor;
 
 namespace WindowsFormsApp1
 {
@@ -42,7 +43,7 @@ namespace WindowsFormsApp1
         { 
             Red, Blue, Green
         }
-
+		private CommandVisitor commandVisitor = new CommandVisitor();
         private Direction _lastDirection;
         private Direction _playerDirection;
 
@@ -214,7 +215,6 @@ namespace WindowsFormsApp1
 					break;
 				case Keys.Space:
                     var bullet = CurrentPlayer.Shoot();
-					textBox1.AppendText(CurrentPlayer.points.ToString() + Environment.NewLine);
                     if (bullet == null)
                     {
                         textBox1.AppendText("OutOfAmmo" + Environment.NewLine);
@@ -288,17 +288,17 @@ namespace WindowsFormsApp1
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             //pagal nustatymus zaidimo laukas
-            e.Graphics.FillRectangle(Brushes.Black, 0, 0, 330, 330);
-            e.Graphics.FillRectangle(Brushes.White, 10, 10, 310, 310);
+            e.Graphics.FillRectangle(Brushes.Black, 0, 0, 900, 330);
+            e.Graphics.FillRectangle(Brushes.White, 10, 10, 880, 310);
 
             if (P1 != null)
             {
-                e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 10, 10);
+                e.Graphics.FillRectangle(Brushes.DarkOrange, P1.PosX, P1.PosY, 30, 30);
             }
 
             if (P2 != null)
             {
-                e.Graphics.FillRectangle(Brushes.Red, P2.PosX, P2.PosY, 10, 10);
+                e.Graphics.FillRectangle(Brushes.Red, P2.PosX, P2.PosY, 30, 30);
             }
 
             if(bullets != null)
@@ -385,39 +385,35 @@ namespace WindowsFormsApp1
 		//note that paisyti reikia ant formos, o ne i picture
 		public Player PlayerMovement(Player CurrentPlayer)
 		{
-			if (CurrentPlayer.PosX >= 10 && CurrentPlayer.PosX <= 310 && CurrentPlayer.PosY >= 10 && CurrentPlayer.PosY <= 310)
+			if (CurrentPlayer.PosX >= 10 && CurrentPlayer.PosX <= 880 && CurrentPlayer.PosY >= 10 && CurrentPlayer.PosY <= 310)
 			{
 				switch (_playerDirection)
 				{
 					case Direction.Right:
-						if (!CollisionDetection(CurrentPlayer, Direction.Right) && CurrentPlayer.PosX != 310)
+						if (!CollisionDetection(CurrentPlayer, Direction.Right))
 						{
-							RightCommand right = new RightCommand(CurrentPlayer);
-							right.Execute();
+							commandVisitor.visit(new RightCommand(CurrentPlayer));
 							break;
 						}
 						break;
 					case Direction.Left:
-						if (!CollisionDetection(CurrentPlayer, Direction.Left) && CurrentPlayer.PosX != 10)
+						if (!CollisionDetection(CurrentPlayer, Direction.Left))
 						{
-							LeftCommand left = new LeftCommand(CurrentPlayer);
-							left.Execute();
+							commandVisitor.visit(new LeftCommand(CurrentPlayer));
 							break;
 						}
 						break;
 					case Direction.Up:
-						if (!CollisionDetection(CurrentPlayer, Direction.Up) && CurrentPlayer.PosY != 10)
+						if (!CollisionDetection(CurrentPlayer, Direction.Up))
 						{
-							UpCommand up = new UpCommand(CurrentPlayer);
-							up.Execute();
+							commandVisitor.visit(new UpCommand(CurrentPlayer));
 							break;
 						}
 						break;
 					case Direction.Down:
-						if (!CollisionDetection(CurrentPlayer, Direction.Down) && CurrentPlayer.PosY != 310)
+						if (!CollisionDetection(CurrentPlayer, Direction.Down))
 						{
-							DownCommand down = new DownCommand(CurrentPlayer);
-							down.Execute();
+							commandVisitor.visit(new DownCommand(CurrentPlayer));
 							break;
 						}
 						break;
