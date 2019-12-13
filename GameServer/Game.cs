@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using GameServer.Models.State;
 
 namespace GameServer
 {
     public static class Game
     {
         private static bool _isStarted;
+        private static PlayerState PlayerState = new PlayerState();
 
         public static IServiceProvider ServiceProvider { get; set; }
 
@@ -32,8 +34,8 @@ namespace GameServer
             {
                 var db = scope.ServiceProvider.GetService<PlayerContext>();
                 var bullets = db.Bullet.ToList();
-                var Players = db.Players.Include(player => player.Weapon).Include(player => player.Weapons).Include(player => player.State).ToList();
-                if (bullets != null)
+                var Players = db.Players.Include(player => player.Weapon).Include(player => player.Weapons).ToList();
+                if (bullets.Count != 0)
                 {
                     foreach (var bullet in bullets)
                     {
@@ -45,21 +47,20 @@ namespace GameServer
                                 Player CurrectPlayer = Players[0];
                                 if (bullet.posY > 5 && bullet.posY < 310 && bullet.posX > 5 && bullet.posX < 310)
                                 {
-                                    if (PlayerToHit != null && PlayerToHit.PosX == bullet.posX && PlayerToHit.PosY == bullet.posY)
+                                    if (PlayerToHit != null && PlayerToHit.PosX <= bullet.posX + 10 && PlayerToHit.PosY <= bullet.posY +10 )
                                     {
                                         bullet.visible = false;
                                         PlayerToHit.reduceHealth(CurrectPlayer.Weapon.damage);
-                                        CurrectPlayer.points += 100;
+                                        CurrectPlayer.points += 50;
+                                        PlayerState.ChangeState(CurrectPlayer);
                                         db.Players.Update(PlayerToHit);
                                         db.Players.Update(CurrectPlayer);
                                         db.Bullet.Update(bullet);
-                                        db.SaveChanges();
                                     }
                                     else
                                     {
                                         bullet.Move();
                                         db.Bullet.Update(bullet);
-                                        db.SaveChanges();
                                     }
 
                                 }
@@ -67,7 +68,6 @@ namespace GameServer
                                 {
                                     bullet.visible = false;
                                     db.Bullet.Update(bullet);
-                                    db.SaveChanges();
                                 }
                             }
                             else
@@ -80,17 +80,16 @@ namespace GameServer
                                     {
                                         bullet.visible = false;
                                         PlayerToHit.reduceHealth(CurrectPlayer.Weapon.damage);
-                                        CurrectPlayer.points += 100;
+                                        CurrectPlayer.points += 50;
+                                        PlayerState.ChangeState(CurrectPlayer);
                                         db.Players.Update(PlayerToHit);
                                         db.Players.Update(CurrectPlayer);
                                         db.Bullet.Update(bullet);
-                                        db.SaveChanges();
                                     }
                                     else
                                     {
                                         bullet.Move();
                                         db.Bullet.Update(bullet);
-                                        db.SaveChanges();
                                     }
 
                                 }
@@ -98,13 +97,13 @@ namespace GameServer
                                 {
                                     bullet.visible = false;
                                     db.Bullet.Update(bullet);
-                                    db.SaveChanges();
                                 }
                             }
                         }
                     }
+                    db.SaveChanges();
                 }
-
+                
                 db.Dispose();
             }
         }

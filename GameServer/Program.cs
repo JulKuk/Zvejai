@@ -14,6 +14,7 @@ namespace GameServer
     {
         public static void Main(string[] args)
         {
+            if(true){ }
             CreateWebHostBuilder(args).Build().Run();
         }
 

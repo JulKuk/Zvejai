@@ -4,6 +4,7 @@ using GameServer.Models.Observer;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameServer.Models.Iterator;
+using GameServer.Models.State;
 
 namespace GameServer.Models
 {
@@ -23,8 +24,9 @@ namespace GameServer.Models
 
         public Istrategy algorithm;
 
-        public State State { get; set; } = new State();
+        public int Score { get; set; } = 0;
 
+    
         public void setStrategy(Istrategy algorithm)
         {
             this.algorithm = algorithm;
@@ -46,13 +48,6 @@ namespace GameServer.Models
             Update();
         }
 
-        //public void Notify(int hp)
-        //{
-        //    foreach (HealthPointTracker hpTracker in players)
-        //    {
-        //        hpTracker.Update(this, hp);
-        //    }
-        //}
 
         public override void Update()
         {
@@ -93,10 +88,6 @@ namespace GameServer.Models
             Weapon._kiekKulkuYra = Weapon.ammo;
         }
 
-        public void ChangeState()
-        {
-            State.goNext(this);
-        }
 
     }
 }

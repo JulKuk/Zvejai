@@ -45,7 +45,6 @@ namespace WindowsFormsApp1
 
         private Direction _lastDirection;
         private Direction _playerDirection;
-		MoveAlgorithm moveAlgorithm = new MoveAlgorithm();
 
 		public ICollection<Player> Players;
         public ICollection<Bullet> bullets;
@@ -59,7 +58,6 @@ namespace WindowsFormsApp1
         
 
 		private List<Obsticale> obsticaless = new List<Obsticale>();
-		private int[] kordinates = new int[20];
 		
 		private Obsticale obsR = new ObsticaleFacotry().CreateObsticale("R");
 		private Obsticale obsB = new ObsticaleFacotry().CreateObsticale("B");
@@ -131,7 +129,7 @@ namespace WindowsFormsApp1
             if (Players.Count == 0)
             {
                 
-				var url1 = await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(1));
+				 await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(1));
                 _currentPlayerId = 1;
 				textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
@@ -139,7 +137,7 @@ namespace WindowsFormsApp1
             else if (Players?.Count == 1)
 			{
 				
-				var url = await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(2));
+				await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(2));
                 _currentPlayerId = 2;
 				textBox1.AppendText("Player 2 Connected.");
                 P2Connected = true;
@@ -197,8 +195,6 @@ namespace WindowsFormsApp1
 			switch (e.KeyCode)
 			{
                 case Keys.N:
-                    textBox1.AppendText("Player State: " + CurrentPlayer.State.getState().ToString() + Environment.NewLine);
-                    e.Handled = true;
                     break;
                 case Keys.W:
 					_playerDirection = Direction.Up;
@@ -218,6 +214,7 @@ namespace WindowsFormsApp1
 					break;
 				case Keys.Space:
                     var bullet = CurrentPlayer.Shoot();
+					textBox1.AppendText(CurrentPlayer.points.ToString() + Environment.NewLine);
                     if (bullet == null)
                     {
                         textBox1.AppendText("OutOfAmmo" + Environment.NewLine);
@@ -325,7 +322,15 @@ namespace WindowsFormsApp1
 
             if (P1Connected)
             {
-                var Random2 = PlayerMovement(P1);
+				if(P1.points == 0 || P1.points == 100)
+				{
+					textBox1.AppendText("Player speed " + P1.speed + Environment.NewLine);
+				}
+				if (P1.points == 300)
+				{
+					textBox1.AppendText("Player Ammo " + P1.Weapon._kiekKulkuYra + Environment.NewLine);
+				}
+				var Random2 = PlayerMovement(P1);
                 await GameFacade.UpdatePlayerToDatabase(Random2);
 
             }
@@ -354,18 +359,18 @@ namespace WindowsFormsApp1
                     await GameFacade.UpdatePlayerToDatabase(P2);
                     textBox1.AppendText("P1 Killed P2 P1 Score:" + P1.points.ToString() + Environment.NewLine); ;
                 }
-                if(P2.points >= 5000 || P1.points >= 5000)
+                if(P2.Score == 4 || P1.Score >= 4)
                 {
-                    if(P2.points > P1.points)
+                    if(P2.Score > P1.Score)
                     {
-                        textBox1.AppendText("Player2 Wins the game with " + P2.points);
-                        textBox1.AppendText("Player1 points " + P1.points);
+                        textBox1.AppendText("Player2 Wins the game with " + P2.Score);
+                        textBox1.AppendText("Player1 points " + P1.Score);
                         timer1.Enabled = false;
                     }
                     else
                     {
-                        textBox1.AppendText("Player1 Wins the game with " + P1.points);
-                        textBox1.AppendText("Player2 points " + P2.points);
+                        textBox1.AppendText("Player1 Wins the game with " + P1.Score);
+                        textBox1.AppendText("Player2 points " + P2.Score);
                         timer1.Enabled = false;
                     }
                 }
