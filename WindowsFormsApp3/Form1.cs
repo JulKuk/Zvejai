@@ -22,13 +22,15 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IO;
 using GameServer.Models.Visitor;
+using GameServer.Models.Adapter;
 
 namespace WindowsFormsApp1
 {
 	public partial class Form1 : Form
 	{
-		
-		//FaCtory
+
+		//Adapteris
+		ReloadWeaponAdapter adapter = new ReloadWeaponAdapter();
 		
         //Http Klientas jsonui siusti
 
@@ -214,6 +216,7 @@ namespace WindowsFormsApp1
 					e.Handled = true;
 					break;
 				case Keys.Space:
+					textBox1.AppendText(CurrentPlayer.Weapon._kiekKulkuYra.ToString() + Environment.NewLine);
                     var bullet = CurrentPlayer.Shoot();
                     if (bullet == null)
                     {
@@ -226,7 +229,7 @@ namespace WindowsFormsApp1
 
 					break;
                 case Keys.R:
-                    CurrentPlayer.reloadWeapon();
+					adapter.changePlayerState(CurrentPlayer);
                     await GameFacade.UpdatePlayerToDatabase(CurrentPlayer);
                     e.Handled = true;
                     break;
