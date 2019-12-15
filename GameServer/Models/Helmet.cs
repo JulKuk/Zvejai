@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace GameServer.Models
 {
-    public class Granade : Weapon
+    public class Helmet : Weapon
     {
         public string name { get; set; }
         public override string SayHello()
         {
-            return name = "Granata";
+            return name = "Salmas";
         }
     }
 }

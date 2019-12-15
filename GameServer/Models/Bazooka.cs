@@ -10,7 +10,7 @@ namespace GameServer.Models
         public string name { get; set; }
         public override string SayHello()
         {
-            return name;
+            return name = "Bazuka";
         }
     }
 }

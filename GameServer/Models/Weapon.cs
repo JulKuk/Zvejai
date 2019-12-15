@@ -12,6 +12,24 @@ namespace GameServer.Models
         public float cost { get; set; }
         public int damage { get; set; }
         public int ammo { get; set; }
+        public int health { get; set; }
+
+        public List<Weapon> Inventory { get; set; }
+
+        public Weapon()
+        {
+            Inventory = new List<Weapon>();
+        }
+
+        public List<Weapon> DisplayInventory()
+        {
+            Console.WriteLine(this.GetType().Name);
+            foreach (var inv in this.Inventory)
+            {
+                inv.DisplayInventory();
+            }
+            return Inventory;
+        }
 
         public int _kiekKulkuYra { get; set; }
 

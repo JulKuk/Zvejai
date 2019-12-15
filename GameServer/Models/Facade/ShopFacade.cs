@@ -15,6 +15,8 @@ namespace GameServer.Models.Facade
         Item automat = new Item("Automatas", new Automat());
         Item pistol = new Item("Pistoletas", new Pistol());
         Item sniper = new Item("Sniperis", new Sniper());
+        Item helmet = new Item("Salmas", new Helmet());
+        Item armor = new Item("Sarvai", new Armor());
 
         public void Open(Player p)
         {
@@ -22,6 +24,8 @@ namespace GameServer.Models.Facade
             shopManager.shopInventory.AddItem(automat);
             shopManager.shopInventory.AddItem(pistol);
             shopManager.shopInventory.AddItem(sniper);
+            shopManager.shopInventory.AddItem(helmet);
+            shopManager.shopInventory.AddItem(armor);
             shopManager.setPlayerGold(p);
 
             //bool canSellPistol = shopManager.CanBuyItem(p, pistol);

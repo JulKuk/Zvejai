@@ -83,7 +83,11 @@ namespace WindowsFormsApp1
 
         public Form1()
 		{
-			this.KeyPreview = true;
+            
+
+            //textBox1.AppendText(bazuka.DisplayInventory());
+
+            this.KeyPreview = true;
             timer1 = new Timer();
 			//pradeda stovedamas
 			_playerDirection = Direction.Stop;
@@ -101,11 +105,24 @@ namespace WindowsFormsApp1
             timer1.Tick += timer1_Tick;
             timer1.Start();
             timer1.Interval = 100;
-            
 
+            // Composite ----------------------------------------------
+            var salmas = new Helmet();
+            var sautuvas = new Pistol();
+            Bazooka bazuka = new Bazooka();
+            bazuka.Inventory.Add(sautuvas);
+            bazuka.Inventory.Add(salmas);
+            bazuka.Inventory.Add(bazuka);
+            
+            foreach (var t in bazuka.Inventory)
+            {
+                textBox1.AppendText(t.SayHello() + Environment.NewLine);
+            }
+
+            // ---------------------------------------------------------
         }
 
-		private void pictureBox1_Click_1(object sender, EventArgs e)
+        private void pictureBox1_Click_1(object sender, EventArgs e)
 		{
 
 		}
