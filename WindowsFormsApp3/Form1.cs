@@ -161,16 +161,14 @@ namespace WindowsFormsApp1
                 _currentPlayerId = 1;
 				textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
-                setMemento(CurrentPlayer);
+                
             }
             else if (Players?.Count == 1)
-			{
-				
+			{ 
 				await GameFacade.AddPlayerToDatabase(GameFacade.GetGame().CreatePlayer(2));
                 _currentPlayerId = 2;
 				textBox1.AppendText("Player 2 Connected.");
                 P2Connected = true;
-                setMemento(CurrentPlayer);
             }
 
 			ObsticalesBraizymas();
@@ -387,16 +385,18 @@ namespace WindowsFormsApp1
 				{
 					textBox1.AppendText("Player Ammo " + P1.Weapon._kiekKulkuYra + Environment.NewLine);
 				}
+				setMemento(CurrentPlayer);
 				var Random2 = PlayerMovement(P1);
                 await GameFacade.UpdatePlayerToDatabase(Random2);
-
-            }
+				
+			}
 
             if (P2Connected)
             {
                 var Random = PlayerMovement(P2);
                 await GameFacade.UpdatePlayerToDatabase(Random);
-            }
+				setMemento(CurrentPlayer);
+			}
 
             if (P1 != null && P2 != null)
             {

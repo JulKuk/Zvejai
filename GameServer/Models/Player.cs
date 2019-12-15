@@ -42,6 +42,7 @@ namespace GameServer.Models
             return this.Name;
         }
 
+
         public void UpdateHealth(int hp)
         {
             health_points += hp;
