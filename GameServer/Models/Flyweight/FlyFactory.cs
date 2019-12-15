@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameServer.Models.Iterator;
 
 namespace GameServer.Models.Flyweight
 {
-    public class FlyFactory
+    public class FlyFactory : Aggregate
     {
         private Dictionary<char, FlyWeightObsticale> _sliders =
         new Dictionary<char, FlyWeightObsticale>();
+        private ArrayList _items = new ArrayList();
 
         public FlyWeightObsticale GetObs(char key)
         {
@@ -28,6 +31,26 @@ namespace GameServer.Models.Flyweight
                 _sliders.Add(key, slider);
             }
             return slider;
+        }
+
+        public override Iterator.Iterator CreateIterator()
+        {
+            return new ConcreteAggregator2(this);
+        }
+
+        //public override Iterator CreateIterator()
+        // {
+        //     return new ConcreteAggregator2(this);
+        //  }
+        // Gets item count 
+        public int Count
+        {
+            get { return _items.Count; }
+        }
+        public object this[int index]
+        {
+            get { return _items[index]; }
+            set { _items.Insert(index, value); }
         }
     }
 }

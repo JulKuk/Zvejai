@@ -67,11 +67,14 @@ namespace WindowsFormsApp1
 		private Obsticale obsB = new ObsticaleFacotry().CreateObsticale("B");
 		private Obsticale obsG = new ObsticaleFacotry().CreateObsticale("G");
 		private Obsticale obsatskiras;
+		private FlyFactory fl = new FlyFactory();
+		private Bazooka bazuka = new Bazooka();
+		private Weapons2 wpns = new Weapons2();
 		// List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
-		
 
 
-        private ShopFacade shop = new ShopFacade();
+
+		private ShopFacade shop = new ShopFacade();
 
 		Gameboard board = new Gameboard();
 
@@ -110,14 +113,15 @@ namespace WindowsFormsApp1
             // Composite ----------------------------------------------
             var salmas = new Helmet();
             var sautuvas = new Pistol();
-            Bazooka bazuka = new Bazooka();
             bazuka.Inventory.Add(sautuvas);
             bazuka.Inventory.Add(salmas);
             bazuka.Inventory.Add(bazuka);
-            
+            int i = 0;
+
             foreach (var t in bazuka.Inventory)
             {
                 textBox1.AppendText(t.SayHello() + Environment.NewLine);
+				wpns[i++] = t.SayHello();
             }
 
             // ---------------------------------------------------------
@@ -199,14 +203,16 @@ namespace WindowsFormsApp1
 			visos.Add(obsG);
 			visos.Add(obsR);
 			char[] chars = { 'R', 'B' ,'G', 'B', 'G','R'};
-			FlyFactory fl = new FlyFactory();
+			
+			
 			int total = 0;
 
 			foreach (char c in chars)
-			{
+			{				
 				FlyWeightObsticale chr = fl.GetObs(c);
 				chr.PosX = xai[total];
 				chr.PosY = yai[total];
+				fl[total] = chr.Type;
 				GenerateObstacle(Convert.ToInt32(chr.PosX), Convert.ToInt32(chr.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
 				total++;
 			}
@@ -263,10 +269,7 @@ namespace WindowsFormsApp1
                     await GameFacade.UpdatePlayerToDatabase(CurrentPlayer);
                     e.Handled = true;
                     break;
-				case Keys.P:
-					Weapons2 wpns = new Weapons2();
-					wpns[0] = "Granade";
-					wpns[1] = "Pistol";
+				case Keys.P:					
 					Iterator i = wpns.CreateIterator();
 					object item = i.First();
 					textBox1.AppendText("Turimi ginklai");
@@ -274,6 +277,16 @@ namespace WindowsFormsApp1
 					{
 						textBox1.AppendText(" " + item);
 						item = i.Next();
+					}
+					break;
+				case Keys.O:
+					Iterator u = fl.CreateIterator();
+					object item2 = u.First();
+					textBox1.AppendText("Sukurtos kliutys");
+					while (item2 != null)
+					{
+						textBox1.AppendText(" " + item2);
+						item2 = u.Next();
 					}
 					break;
 			}
@@ -357,7 +370,7 @@ namespace WindowsFormsApp1
             {
 				if(P1.points == 0 || P1.points == 100)
 				{
-					textBox1.AppendText("Player speed " + P1.speed + Environment.NewLine);
+					//textBox1.AppendText("Player speed " + P1.speed + Environment.NewLine);
 				}
 				if (P1.points == 300)
 				{
