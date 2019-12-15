@@ -18,6 +18,7 @@ using GameServer.Models.Facade;
 using GameServer.Models.Command;
 using GameServer.Models.Iterator;
 using GameServer.Models.Flyweight;
+using GameServer.Models.Memento;
 using WindowsFormsApp3;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -27,7 +28,8 @@ using GameServer.Models.Adapter;
 
 namespace WindowsFormsApp1
 {
-	public partial class Form1 : Form
+	public partial class 
+        Form1 : Form
 	{
 
 		//Adapteris
@@ -70,9 +72,9 @@ namespace WindowsFormsApp1
 		private FlyFactory fl = new FlyFactory();
 		private Bazooka bazuka = new Bazooka();
 		private Weapons2 wpns = new Weapons2();
-		// List<int> vienas = new List<int> { 1, 2, 3, 4, 5 };
+        // List<int> vienas = new List<int> { 1, 2, 3, 4, 5 
 
-
+        Memento.Caretaker ct = new Memento.Caretaker();
 
 		private ShopFacade shop = new ShopFacade();
 
@@ -82,6 +84,7 @@ namespace WindowsFormsApp1
 
 		private List<PictureBox> testObstacles = new List<PictureBox>();
 
+        private Memento.Originator org;
 
         private Timer timer1;
 
@@ -158,6 +161,7 @@ namespace WindowsFormsApp1
                 _currentPlayerId = 1;
 				textBox1.AppendText("Player 1 Connected.");
                 P1Connected = true;
+                setMemento(CurrentPlayer);
             }
             else if (Players?.Count == 1)
 			{
@@ -166,8 +170,8 @@ namespace WindowsFormsApp1
                 _currentPlayerId = 2;
 				textBox1.AppendText("Player 2 Connected.");
                 P2Connected = true;
-                
-			}
+                setMemento(CurrentPlayer);
+            }
 
 			ObsticalesBraizymas();
 
@@ -289,7 +293,14 @@ namespace WindowsFormsApp1
 						item2 = u.Next();
 					}
 					break;
-			}
+                case Keys.K:
+                    CurrentPlayer.addPoints(100);
+                    e.Handled = true;
+                    break;
+                case Keys.L:
+                    org.setPoints(CurrentPlayer.points - 100);
+                    break;
+            }
          }
 
         private Bullet.Direction GetBulletDirection()
@@ -539,5 +550,14 @@ namespace WindowsFormsApp1
             testObstacles.Add(obstacleBox);
 			Controls.Add(obstacleBox);
 		}
-	}
+        public void setMemento(Player P)
+        {
+             org = new Memento.Originator(P.points);
+            Memento.IntefaceMemento meme = org.savePoints();
+            ct.add(meme);
+        }
+
+    }
+
+    
 }

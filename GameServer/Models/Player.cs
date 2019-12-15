@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameServer.Models.Iterator;
 using GameServer.Models.State;
+using GameServer.Models.Memento;
 
 namespace GameServer.Models
 {
@@ -26,7 +27,6 @@ namespace GameServer.Models
 
         public int Score { get; set; } = 0;
 
-    
         public void setStrategy(Istrategy algorithm)
         {
             this.algorithm = algorithm;
@@ -88,6 +88,9 @@ namespace GameServer.Models
             Weapon._kiekKulkuYra = Weapon.ammo;
         }
 
-
+        public void addPoints(int point)
+        {
+            this.points += point;
+        }
     }
 }
