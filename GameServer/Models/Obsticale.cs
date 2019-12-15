@@ -34,5 +34,6 @@ namespace GameServer.Models
         { 
             return this.MemberwiseClone() as Obsticale;
         }
+
     }
 }

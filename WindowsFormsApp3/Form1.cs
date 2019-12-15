@@ -17,6 +17,7 @@ using GameServer.Models.Decorator;
 using GameServer.Models.Facade;
 using GameServer.Models.Command;
 using GameServer.Models.Iterator;
+using GameServer.Models.Flyweight;
 using WindowsFormsApp3;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -197,8 +198,20 @@ namespace WindowsFormsApp1
 			visos.Add(obsB);
 			visos.Add(obsG);
 			visos.Add(obsR);
+			char[] chars = { 'R', 'B' ,'G', 'B', 'G','R'};
+			FlyFactory fl = new FlyFactory();
+			int total = 0;
 
-			for (int i = 0; i < 6; i++)
+			foreach (char c in chars)
+			{
+				FlyWeightObsticale chr = fl.GetObs(c);
+				chr.PosX = xai[total];
+				chr.PosY = yai[total];
+				GenerateObstacle(Convert.ToInt32(chr.PosX), Convert.ToInt32(chr.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
+				total++;
+			}
+
+			/*for (int i = 0; i < 6; i++)
 			{
 				obsatskiras = (Obsticale)obsR.Clone();
 				obsatskiras.PosX = xai[i];
@@ -207,7 +220,7 @@ namespace WindowsFormsApp1
 
                 GenerateObstacle(Convert.ToInt32(obsatskiras.PosX), Convert.ToInt32(obsatskiras.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
 				//var url = await CreateObstacleAsync(obsatskiras);
-			}
+			}*/
 		}
 
 		private async void Form1_KeyDown(object sender, KeyEventArgs e)
