@@ -11,7 +11,8 @@ namespace GameServer.Models.Flyweight
     {
         private Dictionary<char, FlyWeightObsticale> _sliders =
         new Dictionary<char, FlyWeightObsticale>();
-        private ArrayList _items = new ArrayList();
+        //private ArrayList _items = new ArrayList();
+        private List<FlyWeightObsticale> _items = new List<FlyWeightObsticale>();
 
         public FlyWeightObsticale GetObs(char key)
         {
@@ -47,7 +48,7 @@ namespace GameServer.Models.Flyweight
         {
             get { return _items.Count; }
         }
-        public object this[int index]
+        public FlyWeightObsticale this[int index]
         {
             get { return _items[index]; }
             set { _items.Insert(index, value); }

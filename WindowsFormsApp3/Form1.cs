@@ -214,7 +214,7 @@ namespace WindowsFormsApp1
 				FlyWeightObsticale chr = fl.GetObs(c);
 				chr.PosX = xai[total];
 				chr.PosY = yai[total];
-				fl[total] = chr.Type;
+				fl[total] = chr;
 				GenerateObstacle(Convert.ToInt32(chr.PosX), Convert.ToInt32(chr.PosY), 20, 20, (Colour)colours.GetValue(rnd.Next(colours.Length)));
 				total++;
 			}
@@ -287,7 +287,7 @@ namespace WindowsFormsApp1
 					textBox1.AppendText("Sukurtos kliutys");
 					while (item2 != null)
 					{
-						textBox1.AppendText(" " + item2);
+						textBox1.AppendText(" " + item2.GetType().Name);
 						item2 = u.Next();
 					}
 					break;
